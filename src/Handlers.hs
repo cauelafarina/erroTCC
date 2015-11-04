@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes,
              TemplateHaskell #-}
- 
+
 module Handlers where
 import Import
 import Yesod
@@ -13,44 +13,163 @@ import Database.Persist.Postgresql
 
 mkYesodDispatch "Sitio" pRoutes --dizer que o arquivo é só de handler
 
-formDepto :: Form Departamento
-formDepto = renderDivs $ Departamento <$>
-            areq textField "Nome" Nothing <*>
-            areq textField FieldSettings{fsId=Just "hident22",
-                           fsLabel="Sigla",
-                           fsTooltip= Nothing,
-                           fsName= Nothing,
-                           fsAttrs=[("maxlength","2")]} Nothing
+formCadIngre :: Form Ingrediente
+formCadIngre = renderDivs $ Ingrediente <$>
+               areq textField "Nome: " Nothing
 
-formPessoa :: Form Pessoa
-formPessoa = renderDivs $ Pessoa <$>
-             areq textField "Nome" Nothing <*>
-             areq intField "Idade" Nothing <*>
-             areq doubleField "Salario" Nothing <*>
-             areq (selectField dptos) "Depto" Nothing
+formCadReceita :: Form Receita
+formCadReceita = renderDivs $ Receita <$>
+                 areq textField "Nome: " Nothing <*>
+                 areq textField "Descrição: " Nothing <*>
+                 areq (selectField catg) "Categoria" Nothing
+
+catg = do
+       entidades <- runDB $ selectList [] [Asc CategoriaNome]
+       optionsPairs $ fmap (\ent -> (categoriaNome $ entityVal ent, entityKey ent)) entidades
+
+formCadCateg :: Form Categoria
+formCadCateg = renderDivs $ Categoria <$>
+               areq textField "Nome: " Nothing
+
+formCadBusca :: Form Busca
+formCadBusca = renderDivs $ Busca <$>
+               areq (selectField rec) "Receita: " Nothing <*>
+               areq (selectField ing) "Ingredientes: " Nothing
+
+rec = do
+       entidades <- runDB $ selectList [] [Asc ReceitaNome] 
+       optionsPairs $ fmap (\ent -> (receitaNome $ entityVal ent, entityKey ent)) entidades
+
+ing = do
+       entidades <- runDB $ selectList [] [Asc IngredienteNome] 
+       optionsPairs $ fmap (\ent -> (ingredienteNome $ entityVal ent, entityKey ent)) entidades
 
 formUsuario :: Form Usuario
 formUsuario = renderDivs $ Usuario <$>
               areq textField "Login" Nothing <*>
               areq textField "Senha" Nothing
 
-dptos = do
-       entidades <- runDB $ selectList [] [Asc DepartamentoNome] 
-       optionsPairs $ fmap (\ent -> (departamentoSigla $ entityVal ent, entityKey ent)) entidades
-
 widgetForm :: Route Sitio -> Enctype -> Widget -> Text -> Widget
 widgetForm x enctype widget y = [whamlet|
             <h1>
-                Cadastro de #{y}
+                #{y}
             <form method=post action=@{x} enctype=#{enctype}>
                 ^{widget}
-                <input type="submit" value="Cadastrar">
+                <input type="submit" value="Enviar">
 |] >> toWidget [lucius|
        label{
           color:blue;
        }
 |]
 
+widgetHtmlHome :: Widget
+widgetHtmlHome = [whamlet|
+<h1>Geladeira Vazia
+<h2>Aqui você não passa fome!
+|]
+
+widgetCss :: Widget
+widgetCss = toWidget [lucius|
+    h1{
+       color:red;
+    }
+    h2{
+       color:blue;
+    }
+|]
+
+getHomeR :: Handler Html
+getHomeR = defaultLayout (widgetHtmlHome >> widgetCss)
+
+getBuscaR :: Handler Html
+getBuscaR = undefined
+
+getListaR :: Handler Html
+getListaR = undefined
+
+getReceitaR :: Handler Html
+getReceitaR = undefined
+
+getCadastroR :: Handler Html
+getCadastroR = undefined
+
+-- GET POST cadastro de Ingredientes
+getCadIngreR :: Handler Html
+getCadIngreR = do
+             (widget, enctype) <- generateFormPost formCadIngre
+             defaultLayout $ widgetForm CadIngreR enctype widget "Cadastro de Ingredientes"
+
+postCadIngreR :: Handler Html
+postCadIngreR = do
+                ((result, _), _) <- runFormPost formCadIngre
+                case result of
+                    FormSuccess ingre -> do
+                       runDB $ insert ingre
+                       defaultLayout [whamlet|
+                           <h1> #{ingredienteNome ingre} inserido com sucesso. <br>
+                           <a href=@{CadIngreR}> Voltar
+                       |]
+                    _ -> redirect CadIngreR
+-- GET POST cadastro de Ingredientes
+
+-- GET POST cadastro de Receitas
+getCadReceitaR :: Handler Html
+getCadReceitaR = do
+             (widget, enctype) <- generateFormPost formCadReceita
+             defaultLayout $ widgetForm CadReceitaR enctype widget "Cadastro de Receitas"
+
+postCadReceitaR :: Handler Html
+postCadReceitaR = do
+                ((result, _), _) <- runFormPost formCadReceita
+                case result of
+                    FormSuccess receita -> do
+                       runDB $ insert receita
+                       defaultLayout [whamlet|
+                           <h1> #{receitaNome receita} inserido com sucesso. <br>
+                           <a href=@{CadReceitaR}> Voltar
+                       |]
+                    _ -> redirect CadReceitaR
+-- GET POST cadastro de Receitas
+
+-- GET POST cadastro de Busca
+getCadBuscaR :: Handler Html
+getCadBuscaR = do
+             (widget, enctype) <- generateFormPost formCadBusca
+             defaultLayout $ widgetForm CadBuscaR enctype widget "Cadastro de Buscas"
+
+postCadBuscaR :: Handler Html
+postCadBuscaR = do
+                ((result, _), _) <- runFormPost formCadBusca
+                case result of
+                    FormSuccess busca -> do
+                       runDB $ insert busca
+                       defaultLayout [whamlet|
+                           <h1> Busca inserida com sucesso. <br>
+                           <a href=@{CadBuscaR}> Voltar
+                       |]
+                    _ -> redirect CadBuscaR
+-- GET POST cadastro de Busca
+
+
+-- GET POST cadastro de Categorias
+getCadCateR :: Handler Html
+getCadCateR = do
+             (widget, enctype) <- generateFormPost formCadCateg
+             defaultLayout $ widgetForm CadCateR enctype widget "Cadastro de Categorias"
+
+postCadCateR :: Handler Html
+postCadCateR = do
+                ((result, _), _) <- runFormPost formCadCateg
+                case result of
+                    FormSuccess categoria -> do
+                       runDB $ insert categoria
+                       defaultLayout [whamlet|
+                           <h1> #{categoriaNome categoria} inserida com sucesso. <br>
+                           <a href=@{CadCateR}> Voltar
+                       |]
+                    _ -> redirect CadCateR
+-- GET POST cadastro de Categorias
+{-
 getCadastroR :: Handler Html
 getCadastroR = do
              (widget, enctype) <- generateFormPost formPessoa
@@ -128,7 +247,7 @@ getUsuarioR = do
                  $forall Entity uid usuario <- listaP
                      <p> #{usuarioLogin usuario} <br>
              |]
-
+-}
 getAutR :: Handler Html
 getAutR = do
           (widget, enctype) <- generateFormPost formUsuario
@@ -139,18 +258,19 @@ postAutR = do
            ((result, _), _) <- runFormPost formUsuario
            case result of
                     FormSuccess user -> do
-                       setSession "_ID" (usuarioLogin user)
-                       redirect CadastroR
+                       setSession "_ID" (usuarioNome user)
+                       redirect CadIngreR
                     _ -> redirect AutR
 
 getByeR :: Handler Html
 getByeR = do
           deleteSession "_ID"
-          defaultLayout [whamlet| BYE! |]
+          defaultLayout [whamlet| BYE! <br>
+                        <a href=@{HomeR}> Voltar|]
 
-connStr = "dbname=d315s7h037m5g4 host=ec2-107-21-219-201.compute-1.amazonaws.com user=vlfhtvmuqtkxwb password=m_7hoITm4EhoCGrPJn_4Px7GGm port=5432"
+connStr = "dbname=ddniie89e3rtk3 host=ec2-54-225-199-108.compute-1.amazonaws.com user=haldvwbpgvjigm password=PQOXmc2BAD8zxzmBJmDx7KPMh6 port=5432"
 
 main::IO()
-main = runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do 
+main = runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do
        runSqlPersistMPool (runMigration migrateAll) pool
        warpEnv (Sitio pool)

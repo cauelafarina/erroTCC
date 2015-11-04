@@ -2,14 +2,17 @@
 module Import where
 
 import Yesod
- 
+
 pRoutes = [parseRoutes|
-   / CadastroR GET POST
-   /listar ListarR GET
-   /pessoa/#PessoaId PessoaR GET
-   /depto DeptoR GET POST
-   /user UserR GET POST
-   /usuario UsuarioR GET
+   / HomeR GET
+   /busca BuscaR GET
+   /listar ListaR GET
+   /receita ReceitaR GET
+   /cadastro CadastroR GET
+   /cadastro/ingrediente CadIngreR GET POST
+   /cadastro/receita CadReceitaR GET POST
+   /cadastro/busca CadBuscaR GET POST
+   /cadastro/categoria CadCateR GET POST
    /auto AutR GET POST
    /bye ByeR GET
 |]

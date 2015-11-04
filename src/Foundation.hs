@@ -12,20 +12,27 @@ import Database.Persist.Postgresql
 data Sitio = Sitio { connPool :: ConnectionPool }
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
-Departamento
+Ingrediente
    nome Text
-   sigla Text sqltype=varchar(2)
    deriving Show
 
-Pessoa
+Categoria
    nome Text
-   idade Int
-   salario Double
-   deptoid DepartamentoId
+   deriving Show
+
+Receita
+   nome Text
+   descricao Text
+   catid CategoriaId
+   deriving Show
+
+Busca
+   recid ReceitaId
+   ingid IngredienteId
    deriving Show
 
 Usuario
-   login Text
+   nome Text
    pass Text
    deriving Show
 |]
@@ -42,7 +49,10 @@ instance YesodPersist Sitio where
 instance Yesod Sitio where
     authRoute _ = Just AutR --quando precisar se autenticar
     isAuthorized CadastroR _ = isAdmin --torna a rota necessaria por login
-    isAuthorized DeptoR _ = isAdmin
+    isAuthorized CadIngreR _ = isAdmin
+    isAuthorized CadReceitaR _ = isAdmin
+    isAuthorized CadBuscaR _ = isAdmin
+    isAuthorized CadCateR _ = isAdmin
     isAuthorized _ _ = return Authorized
 
 isAdmin = do
