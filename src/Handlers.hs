@@ -5,13 +5,13 @@ module Handlers where
 import Import
 import Yesod
 import Foundation
-import Control.Monad.Logger (runStdoutLoggingT)
-import Control.Applicative
+import Control.Monad.Logger (runStdoutLoggingT) --ver criação do banco
+import Control.Applicative --criar formulario
 import Data.Text
 
 import Database.Persist.Postgresql
 
-mkYesodDispatch "Sitio" pRoutes
+mkYesodDispatch "Sitio" pRoutes --dizer que o arquivo é só de handler
 
 formDepto :: Form Departamento
 formDepto = renderDivs $ Departamento <$>
@@ -29,6 +29,11 @@ formPessoa = renderDivs $ Pessoa <$>
              areq doubleField "Salario" Nothing <*>
              areq (selectField dptos) "Depto" Nothing
 
+formUsuario :: Form Usuario
+formUsuario = renderDivs $ Usuario <$>
+              areq textField "Login" Nothing <*>
+              areq textField "Senha" Nothing
+
 dptos = do
        entidades <- runDB $ selectList [] [Asc DepartamentoNome] 
        optionsPairs $ fmap (\ent -> (departamentoSigla $ entityVal ent, entityKey ent)) entidades
@@ -40,6 +45,10 @@ widgetForm x enctype widget y = [whamlet|
             <form method=post action=@{x} enctype=#{enctype}>
                 ^{widget}
                 <input type="submit" value="Cadastrar">
+|] >> toWidget [lucius|
+       label{
+          color:blue;
+       }
 |]
 
 getCadastroR :: Handler Html
@@ -49,11 +58,13 @@ getCadastroR = do
 
 getPessoaR :: PessoaId -> Handler Html
 getPessoaR pid = do
-             pessoa <- runDB $ get404 pid 
-             defaultLayout [whamlet| 
+             pessoa <- runDB $ get404 pid
+             dpto <- runDB $ get $ pessoaDeptoid pessoa
+             defaultLayout [whamlet|
                  <h1> Seja bem-vindx #{pessoaNome pessoa}
                  <p> Salario: #{pessoaSalario pessoa}
                  <p> Idade: #{pessoaIdade pessoa}
+                 <p> Depto: #{show $ fmap departamentoNome dpto}
              |]
 
 getListarR :: Handler Html
@@ -92,8 +103,52 @@ postDeptoR = do
                        |]
                     _ -> redirect DeptoR
 
+getUserR :: Handler Html
+getUserR = do
+             (widget, enctype) <- generateFormPost formUsuario
+             defaultLayout $ widgetForm UserR enctype widget "Usuários"
 
-connStr = "dbname=dd9en8l5q4hh2a host=ec2-107-21-219-201.compute-1.amazonaws.com user=kpuwtbqndoeyqb password=aCROh525uugAWF1l7kahlNN3E0 port=5432"
+postUserR :: Handler Html
+postUserR = do
+                ((result, _), _) <- runFormPost formUsuario
+                case result of
+                    FormSuccess usuario -> do
+                       runDB $ insert usuario
+                       defaultLayout [whamlet|
+                           <h1> #{usuarioLogin usuario} Inserido com sucesso. 
+                       |]
+                    _ -> redirect UserR
+
+
+getUsuarioR :: Handler Html
+getUsuarioR = do
+             listaP <- runDB $ selectList [] [Asc UsuarioLogin]
+             defaultLayout [whamlet|
+                 <h1> Usuarios cadastrados:
+                 $forall Entity uid usuario <- listaP
+                     <p> #{usuarioLogin usuario} <br>
+             |]
+
+getAutR :: Handler Html
+getAutR = do
+          (widget, enctype) <- generateFormPost formUsuario
+          defaultLayout $ widgetForm AutR enctype widget "Login"
+
+postAutR :: Handler Html
+postAutR = do
+           ((result, _), _) <- runFormPost formUsuario
+           case result of
+                    FormSuccess user -> do
+                       setSession "_ID" (usuarioLogin user)
+                       redirect CadastroR
+                    _ -> redirect AutR
+
+getByeR :: Handler Html
+getByeR = do
+          deleteSession "_ID"
+          defaultLayout [whamlet| BYE! |]
+
+connStr = "dbname=d315s7h037m5g4 host=ec2-107-21-219-201.compute-1.amazonaws.com user=vlfhtvmuqtkxwb password=m_7hoITm4EhoCGrPJn_4Px7GGm port=5432"
 
 main::IO()
 main = runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do 

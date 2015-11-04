@@ -23,6 +23,11 @@ Pessoa
    salario Double
    deptoid DepartamentoId
    deriving Show
+
+Usuario
+   login Text
+   pass Text
+   deriving Show
 |]
 
 mkYesodData "Sitio" pRoutes
@@ -35,6 +40,17 @@ instance YesodPersist Sitio where
        runSqlPool f pool
 
 instance Yesod Sitio where
+    authRoute _ = Just AutR --quando precisar se autenticar
+    isAuthorized CadastroR _ = isAdmin --torna a rota necessaria por login
+    isAuthorized DeptoR _ = isAdmin
+    isAuthorized _ _ = return Authorized
+
+isAdmin = do
+    mu <- lookupSession "_ID"
+    return $ case mu of
+        Nothing -> AuthenticationRequired
+        Just "admin" -> Authorized
+        Just _ -> Unauthorized "Voce tem que ser um administrador"
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
 
