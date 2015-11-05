@@ -21,9 +21,9 @@ Categoria
    deriving Show
 
 Receita
-   nome Text
-   descricao Text
    catid CategoriaId
+   nome Text
+   descricao Textarea
    deriving Show
 
 Busca

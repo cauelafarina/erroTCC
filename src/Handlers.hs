@@ -19,9 +19,9 @@ formCadIngre = renderDivs $ Ingrediente <$>
 
 formCadReceita :: Form Receita
 formCadReceita = renderDivs $ Receita <$>
+                 areq (selectField catg) "Categoria" Nothing <*>
                  areq textField "Nome: " Nothing <*>
-                 areq textField "Descrição: " Nothing <*>
-                 areq (selectField catg) "Categoria" Nothing
+                 areq textareaField "Descrição: " Nothing
 
 catg = do
        entidades <- runDB $ selectList [] [Asc CategoriaNome]
@@ -62,6 +62,46 @@ widgetForm x enctype widget y = [whamlet|
        }
 |]
 
+widgetImports :: Widget
+widgetImports = [whamlet|
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous">
+
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation
+                    <span class="icon-bar">
+                    <span class="icon-bar">
+                    <span class="icon-bar">
+                <a class="navbar-brand" href=@{HomeR}>Home
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href=@{BuscaR}>Busca
+                    <li>
+                        <a href=@{CadastroR}>Cadastro
+
+|]
+
+widgetWelcome :: Widget
+widgetWelcome = [whamlet|
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Geladeira Vazia
+            <h2>Aqui você não passa fome!
+            <h3>Feito por Cauê La Farina | Guilherme Egidio | Jorge Correa | Julliana Alvarez
+
+|]
+
+
 widgetHtmlHome :: Widget
 widgetHtmlHome = [whamlet|
 <h1>Geladeira Vazia
@@ -79,7 +119,7 @@ widgetCss = toWidget [lucius|
 |]
 
 getHomeR :: Handler Html
-getHomeR = defaultLayout (widgetHtmlHome >> widgetCss)
+getHomeR = defaultLayout (widgetImports >> widgetWelcome >> widgetCss)
 
 getBuscaR :: Handler Html
 getBuscaR = undefined
@@ -97,7 +137,7 @@ getCadastroR = undefined
 getCadIngreR :: Handler Html
 getCadIngreR = do
              (widget, enctype) <- generateFormPost formCadIngre
-             defaultLayout $ widgetForm CadIngreR enctype widget "Cadastro de Ingredientes"
+             defaultLayout $ widgetImports >> widgetForm CadIngreR enctype widget "Cadastro de Ingredientes"
 
 postCadIngreR :: Handler Html
 postCadIngreR = do
@@ -116,7 +156,7 @@ postCadIngreR = do
 getCadReceitaR :: Handler Html
 getCadReceitaR = do
              (widget, enctype) <- generateFormPost formCadReceita
-             defaultLayout $ widgetForm CadReceitaR enctype widget "Cadastro de Receitas"
+             defaultLayout $ widgetImports >> widgetForm CadReceitaR enctype widget "Cadastro de Receitas"
 
 postCadReceitaR :: Handler Html
 postCadReceitaR = do
@@ -135,7 +175,7 @@ postCadReceitaR = do
 getCadBuscaR :: Handler Html
 getCadBuscaR = do
              (widget, enctype) <- generateFormPost formCadBusca
-             defaultLayout $ widgetForm CadBuscaR enctype widget "Cadastro de Buscas"
+             defaultLayout $ widgetImports >> widgetForm CadBuscaR enctype widget "Cadastro de Buscas"
 
 postCadBuscaR :: Handler Html
 postCadBuscaR = do
@@ -251,7 +291,7 @@ getUsuarioR = do
 getAutR :: Handler Html
 getAutR = do
           (widget, enctype) <- generateFormPost formUsuario
-          defaultLayout $ widgetForm AutR enctype widget "Login"
+          defaultLayout $ widgetImports >> widgetForm AutR enctype widget "Login"
 
 postAutR :: Handler Html
 postAutR = do
@@ -273,4 +313,5 @@ connStr = "dbname=ddniie89e3rtk3 host=ec2-54-225-199-108.compute-1.amazonaws.com
 main::IO()
 main = runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do
        runSqlPersistMPool (runMigration migrateAll) pool
+--       warp 8080 $ Sitio pool
        warpEnv (Sitio pool)
