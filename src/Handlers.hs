@@ -61,6 +61,17 @@ widgetForm x enctype widget y = [whamlet|
           color:blue;
        }
 |]
+{-
+ww :: Widget
+ww = to[hamlet|
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous">
+|]-}
 
 widgetImports :: Widget
 widgetImports = [whamlet|
@@ -74,19 +85,35 @@ widgetImports = [whamlet|
 
     <nav class="navbar navbar-default">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation
-                    <span class="icon-bar">
-                    <span class="icon-bar">
-                    <span class="icon-bar">
-                <a class="navbar-brand" href=@{HomeR}>Home
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href=@{BuscaR}>Busca
-                    <li>
-                        <a href=@{CadastroR}>Cadastro
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="">
+                            <a href=@{HomeR}>Home
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Listar
+                               <b class="caret">
+                            <ul class="dropdown-menu">
+                                <li class="">
+                                    <a href=@{ListCateR}>Categoria
+                                <li class="">
+                                    <a href=@{ListIngreR}>Ingrediente
+                                <li class="">
+                                    <a href=@{ListReceitaR}>Receita
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cadastros
+                               <b class="caret">
+                            <ul class="dropdown-menu">
+                                <li class="">
+                                    <a href=@{CadCateR}>Categoria
+                                <li class="">
+                                    <a href=@{CadIngreR}>Ingrediente
+                                <li class="">
+                                    <a href=@{CadReceitaR}>Receita
+                                <li class="">
+                                    <a href=@{CadBuscaR}>Busca
+                         <li class="">
+                             <a href=@{ByeR}>Sair
+
 
 |]
 
@@ -126,9 +153,6 @@ getBuscaR = undefined
 
 getListaR :: Handler Html
 getListaR = undefined
-
-getReceitaR :: Handler Html
-getReceitaR = undefined
 
 getCadastroR :: Handler Html
 getCadastroR = undefined
@@ -195,7 +219,7 @@ postCadBuscaR = do
 getCadCateR :: Handler Html
 getCadCateR = do
              (widget, enctype) <- generateFormPost formCadCateg
-             defaultLayout $ widgetForm CadCateR enctype widget "Cadastro de Categorias"
+             defaultLayout $ widgetImports >> widgetForm CadCateR enctype widget "Cadastro de Categorias"
 
 postCadCateR :: Handler Html
 postCadCateR = do
@@ -288,6 +312,41 @@ getUsuarioR = do
                      <p> #{usuarioLogin usuario} <br>
              |]
 -}
+getListIngreR :: Handler Html
+getListIngreR = do
+             listaP <- runDB $ selectList [] [Asc IngredienteNome]
+             defaultLayout $ widgetImports >>  [whamlet|
+                 <h1> Ingredientes cadastrados:
+                 $forall Entity iid ingrediente <- listaP
+                     <p> #{ingredienteNome ingrediente} <br>
+             |]
+
+getListReceitaR :: Handler Html
+getListReceitaR = do
+             listaP <- runDB $ selectList [] [Asc ReceitaNome]
+             defaultLayout $ widgetImports >>  [whamlet|
+                 <h1> Receitas cadastradas:
+                 $forall Entity rid receita <- listaP
+                     <a href=@{ReceitaR rid}> #{receitaNome receita} <br>
+             |]
+
+getReceitaR :: ReceitaId -> Handler Html
+getReceitaR rid = do
+             receita <- runDB $ get404 rid
+             defaultLayout $ widgetImports >>  [whamlet|
+                 <h1> #{receitaNome receita}
+                 <p> #{receitaDescricao receita}
+             |]
+
+getListCateR :: Handler Html
+getListCateR = do
+             listaP <- runDB $ selectList [] [Asc CategoriaNome]
+             defaultLayout $ widgetImports >>  [whamlet|
+                 <h1> Categorias cadastradas:
+                 $forall Entity cid categoria <- listaP
+                     <p> #{categoriaNome categoria} <br>
+             |]
+
 getAutR :: Handler Html
 getAutR = do
           (widget, enctype) <- generateFormPost formUsuario
@@ -305,7 +364,7 @@ postAutR = do
 getByeR :: Handler Html
 getByeR = do
           deleteSession "_ID"
-          defaultLayout [whamlet| BYE! <br>
+          defaultLayout $ widgetImports >> [whamlet| BYE! <br>
                         <a href=@{HomeR}> Voltar|]
 
 connStr = "dbname=ddniie89e3rtk3 host=ec2-54-225-199-108.compute-1.amazonaws.com user=haldvwbpgvjigm password=PQOXmc2BAD8zxzmBJmDx7KPMh6 port=5432"

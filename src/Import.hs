@@ -7,7 +7,10 @@ pRoutes = [parseRoutes|
    / HomeR GET
    /busca BuscaR GET
    /listar ListaR GET
-   /receita ReceitaR GET
+   /receita/#ReceitaId ReceitaR GET
+   /listar/ingrediente ListIngreR GET
+   /listar/receita ListReceitaR GET
+   /listar/categoria ListCateR GET
    /cadastro CadastroR GET
    /cadastro/ingrediente CadIngreR GET POST
    /cadastro/receita CadReceitaR GET POST
