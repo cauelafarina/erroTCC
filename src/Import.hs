@@ -17,5 +17,6 @@ pRoutes = [parseRoutes|
    /cadastro/busca CadBuscaR GET POST
    /cadastro/categoria CadCateR GET POST
    /auto AutR GET POST
+   /creditos CreditoR GET
    /bye ByeR GET
 |]

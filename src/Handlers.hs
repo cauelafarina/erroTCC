@@ -51,102 +51,233 @@ formUsuario = renderDivs $ Usuario <$>
 
 widgetForm :: Route Sitio -> Enctype -> Widget -> Text -> Widget
 widgetForm x enctype widget y = [whamlet|
-            <h1>
-                #{y}
-            <form method=post action=@{x} enctype=#{enctype}>
-                ^{widget}
+     <div class="row">
+           <div class="col-sm-12">
+                <div class="col-sm-12 page-header">
+                      <h1>
+                          <span class="glyphicon glyphicon-download-alt">
+                          #{y}
+     <div class="row">
+            <div class="col-sm-6">
+                <form method=post action=@{x} enctype=#{enctype}>
+                    ^{widget}
                 <input type="submit" value="Enviar">
-|] >> toWidget [lucius|
-       label{
-          color:blue;
-       }
 |]
-{-
-ww :: Widget
-ww = to[hamlet|
+
+wHead :: String -> Widget
+wHead title = toWidgetHead [hamlet|
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-2.1.4.min.js" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">    
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous">
-|]-}
+    <title>#{title}
+|]
 
-widgetImports :: Widget
-widgetImports = [whamlet|
+wNavigation :: Widget
+wNavigation = [whamlet|
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation
+                    <span class="icon-bar">
+                    <span class="icon-bar">
+                    <span class="icon-bar">
+                <a class="navbar-brand" href=@{HomeR}>
+                   <span class="glyphicon glyphicon-home">
+                   Início
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-list">
+                        Listar
+                        <span class="caret">
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a href=@{ListCateR}>Categorias
+                        <li>
+                          <a href=@{ListIngreR}>Ingredientes
+                        <li>
+                          <a href=@{ListReceitaR}>Receitas
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous">
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-remove-circle">
+                        Cadastro
+                        <span class="caret">
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a href=@{CadIngreR}>Ingredientes
+                        <li>
+                          <a href=@{CadCateR}>Categorias
+                        <li>
+                          <a href=@{CadReceitaR}>Receita
+                        <li>
+                          <a href=@{CadBuscaR}>Busca
 
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="">
-                            <a href=@{HomeR}>Home
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Listar
-                               <b class="caret">
-                            <ul class="dropdown-menu">
-                                <li class="">
-                                    <a href=@{ListCateR}>Categoria
-                                <li class="">
-                                    <a href=@{ListIngreR}>Ingrediente
-                                <li class="">
-                                    <a href=@{ListReceitaR}>Receita
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cadastros
-                               <b class="caret">
-                            <ul class="dropdown-menu">
-                                <li class="">
-                                    <a href=@{CadCateR}>Categoria
-                                <li class="">
-                                    <a href=@{CadIngreR}>Ingrediente
-                                <li class="">
-                                    <a href=@{CadReceitaR}>Receita
-                                <li class="">
-                                    <a href=@{CadBuscaR}>Busca
-                         <li class="">
-                             <a href=@{ByeR}>Sair
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href=@{CreditoR}>
+                           <span class="glyphicon glyphicon-user">
+                           Créditos
+                    <li>
+                        <a href=@{ByeR}>
+                           <span class="glyphicon glyphicon-off">
+                           Sair
+|]
 
-
+wContainer :: String -> Widget -> Widget
+wContainer title content = do
+    wHead title
+    [whamlet|
+    <div class="container">
+         ^{wNavigation}
+         ^{content}
 |]
 
 widgetWelcome :: Widget
 widgetWelcome = [whamlet|
 
-    <div class="container">
-        <div class="jumbotron">
-            <h1>Geladeira Vazia
-            <h2>Aqui você não passa fome!
-            <h3>Feito por Cauê La Farina | Guilherme Egidio | Jorge Correa | Julliana Alvarez
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jumbotron">
+               <h1>Do Armário à Geladeira
+               <h2>Aqui você não passa fome!
 
 |]
 
 
-widgetHtmlHome :: Widget
-widgetHtmlHome = [whamlet|
-<h1>Geladeira Vazia
-<h2>Aqui você não passa fome!
-|]
+wCredito :: Widget
+wCredito = do
+    [whamlet|
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-12 page-header">
+                    <h1>
+                        <span class="glyphicon glyphicon-user">
+                        Desenvolvedores
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Alunos
+                          <th>Matrícula
+                      <tbody>
+                        <tr>
+                          <td>Cauê La Farina
+                          <td>1310007-7
+                        <tr>
+                          <td>Guilherme Egídio
+                          <td>........
+                        <tr>
+                          <td>Jorge Correa
+                          <td>........
+                        <tr>
+                          <td>Julliana Alavarez
+                          <td>........
+    |]
 
-widgetCss :: Widget
-widgetCss = toWidget [lucius|
-    h1{
-       color:red;
-    }
-    h2{
-       color:blue;
-    }
-|]
+wListReceitas :: Widget
+wListReceitas = do
+    listaR <- handlerToWidget $ runDB $ selectList [] [Asc ReceitaNome]
+    [whamlet|
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="col-sm-12 page-header">
+          <h1>
+            <span class="glyphicon glyphicon-list-alt">
+            Lista de Receitas
+    <div class="row">
+      <div class="col-sm-12">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Receitas Cadastrados
+              <tbody>
+                $forall Entity rid receita <- listaR
+                  <tr>
+                    <td>
+                        <a href=@{ReceitaR rid}>#{receitaNome receita}
+    |]
+
+wReceita :: ReceitaId -> Widget
+wReceita rid = do
+    receita <- handlerToWidget $ runDB $ get404 rid
+    [whamlet|
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-12 page-header">
+                    <h1>
+                        <span class="glyphicon glyphicon-registration-mark">
+                        #{receitaNome receita}
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Como fazer:
+                                <td>#{receitaDescricao receita}
+
+    |]
+
+wListIngre :: Widget
+wListIngre = do
+    listaI <- handlerToWidget $ runDB $ selectList [] [Asc IngredienteNome]
+    [whamlet|
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="col-sm-12 page-header">
+          <h1>
+            <span class="glyphicon glyphicon-list-alt">
+            Lista de Ingredientes
+    <div class="row">
+      <div class="col-sm-12">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Ingredientes Cadastrados
+              <tbody>
+                $forall Entity iid ingrediente <- listaI
+                  <tr>
+                    <td>
+                        <p>#{ingredienteNome ingrediente}
+    |]
+
+wListCate :: Widget
+wListCate = do
+    listaC <- handlerToWidget $ runDB $ selectList [] [Asc CategoriaNome]
+    [whamlet|
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="col-sm-12 page-header">
+          <h1>
+            <span class="glyphicon glyphicon-list-alt">
+            Lista de Categorias
+    <div class="row">
+      <div class="col-sm-12">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Categorias Cadastradas
+              <tbody>
+                $forall Entity cid categoria <- listaC
+                  <tr>
+                    <td>
+                        <p>#{categoriaNome categoria}
+    |]
 
 getHomeR :: Handler Html
-getHomeR = defaultLayout (widgetImports >> widgetWelcome >> widgetCss)
+getHomeR = defaultLayout $ do (wContainer "Home" widgetWelcome)
 
 getBuscaR :: Handler Html
 getBuscaR = undefined
@@ -157,11 +288,15 @@ getListaR = undefined
 getCadastroR :: Handler Html
 getCadastroR = undefined
 
+getCreditoR :: Handler Html
+getCreditoR = defaultLayout $ do (wContainer "Créditos" wCredito)
+
 -- GET POST cadastro de Ingredientes
 getCadIngreR :: Handler Html
 getCadIngreR = do
              (widget, enctype) <- generateFormPost formCadIngre
-             defaultLayout $ widgetImports >> widgetForm CadIngreR enctype widget "Cadastro de Ingredientes"
+             defaultLayout $ do (wContainer "Cadastro de Ingredientes" (widgetForm CadIngreR enctype widget "Cadastro de Ingredientes"))
+
 
 postCadIngreR :: Handler Html
 postCadIngreR = do
@@ -180,7 +315,7 @@ postCadIngreR = do
 getCadReceitaR :: Handler Html
 getCadReceitaR = do
              (widget, enctype) <- generateFormPost formCadReceita
-             defaultLayout $ widgetImports >> widgetForm CadReceitaR enctype widget "Cadastro de Receitas"
+             defaultLayout $ do (wContainer "Cadastro de Receitas" (widgetForm CadReceitaR enctype widget "Cadastro de Receitas"))
 
 postCadReceitaR :: Handler Html
 postCadReceitaR = do
@@ -199,7 +334,7 @@ postCadReceitaR = do
 getCadBuscaR :: Handler Html
 getCadBuscaR = do
              (widget, enctype) <- generateFormPost formCadBusca
-             defaultLayout $ widgetImports >> widgetForm CadBuscaR enctype widget "Cadastro de Buscas"
+             defaultLayout $ do (wContainer "Cadastro de Receitas" (widgetForm CadBuscaR enctype widget "Cadastro de Buscas"))
 
 postCadBuscaR :: Handler Html
 postCadBuscaR = do
@@ -219,7 +354,7 @@ postCadBuscaR = do
 getCadCateR :: Handler Html
 getCadCateR = do
              (widget, enctype) <- generateFormPost formCadCateg
-             defaultLayout $ widgetImports >> widgetForm CadCateR enctype widget "Cadastro de Categorias"
+             defaultLayout $ do (wContainer "Cadastro de Receitas" (widgetForm CadCateR enctype widget "Cadastro de Categorias"))
 
 postCadCateR :: Handler Html
 postCadCateR = do
@@ -233,124 +368,24 @@ postCadCateR = do
                        |]
                     _ -> redirect CadCateR
 -- GET POST cadastro de Categorias
-{-
-getCadastroR :: Handler Html
-getCadastroR = do
-             (widget, enctype) <- generateFormPost formPessoa
-             defaultLayout $ widgetForm CadastroR enctype widget "Pessoas"
-
-getPessoaR :: PessoaId -> Handler Html
-getPessoaR pid = do
-             pessoa <- runDB $ get404 pid
-             dpto <- runDB $ get $ pessoaDeptoid pessoa
-             defaultLayout [whamlet|
-                 <h1> Seja bem-vindx #{pessoaNome pessoa}
-                 <p> Salario: #{pessoaSalario pessoa}
-                 <p> Idade: #{pessoaIdade pessoa}
-                 <p> Depto: #{show $ fmap departamentoNome dpto}
-             |]
-
-getListarR :: Handler Html
-getListarR = do
-             listaP <- runDB $ selectList [] [Asc PessoaNome]
-             defaultLayout [whamlet|
-                 <h1> Pessoas cadastradas:
-                 $forall Entity pid pessoa <- listaP
-                     <a href=@{PessoaR pid}> #{pessoaNome pessoa} <br>
-             |]
-
-postCadastroR :: Handler Html
-postCadastroR = do
-                ((result, _), _) <- runFormPost formPessoa
-                case result of
-                    FormSuccess pessoa -> do
-                       runDB $ insert pessoa 
-                       defaultLayout [whamlet| 
-                           <h1> #{pessoaNome pessoa} Inseridx com sucesso. 
-                       |]
-                    _ -> redirect CadastroR
-
-getDeptoR :: Handler Html
-getDeptoR = do
-             (widget, enctype) <- generateFormPost formDepto
-             defaultLayout $ widgetForm DeptoR enctype widget "Departamentos"
-
-postDeptoR :: Handler Html
-postDeptoR = do
-                ((result, _), _) <- runFormPost formDepto
-                case result of
-                    FormSuccess depto -> do
-                       runDB $ insert depto
-                       defaultLayout [whamlet|
-                           <h1> #{departamentoNome depto} Inserido com sucesso. 
-                       |]
-                    _ -> redirect DeptoR
-
-getUserR :: Handler Html
-getUserR = do
-             (widget, enctype) <- generateFormPost formUsuario
-             defaultLayout $ widgetForm UserR enctype widget "Usuários"
-
-postUserR :: Handler Html
-postUserR = do
-                ((result, _), _) <- runFormPost formUsuario
-                case result of
-                    FormSuccess usuario -> do
-                       runDB $ insert usuario
-                       defaultLayout [whamlet|
-                           <h1> #{usuarioLogin usuario} Inserido com sucesso. 
-                       |]
-                    _ -> redirect UserR
 
 
-getUsuarioR :: Handler Html
-getUsuarioR = do
-             listaP <- runDB $ selectList [] [Asc UsuarioLogin]
-             defaultLayout [whamlet|
-                 <h1> Usuarios cadastrados:
-                 $forall Entity uid usuario <- listaP
-                     <p> #{usuarioLogin usuario} <br>
-             |]
--}
 getListIngreR :: Handler Html
-getListIngreR = do
-             listaP <- runDB $ selectList [] [Asc IngredienteNome]
-             defaultLayout $ widgetImports >>  [whamlet|
-                 <h1> Ingredientes cadastrados:
-                 $forall Entity iid ingrediente <- listaP
-                     <p> #{ingredienteNome ingrediente} <br>
-             |]
+getListIngreR = defaultLayout $ do (wContainer "Lista de Ingredientes" wListIngre)
 
 getListReceitaR :: Handler Html
-getListReceitaR = do
-             listaP <- runDB $ selectList [] [Asc ReceitaNome]
-             defaultLayout $ widgetImports >>  [whamlet|
-                 <h1> Receitas cadastradas:
-                 $forall Entity rid receita <- listaP
-                     <a href=@{ReceitaR rid}> #{receitaNome receita} <br>
-             |]
+getListReceitaR = defaultLayout $ do (wContainer "Lista de Receitas" wListReceitas)
 
 getReceitaR :: ReceitaId -> Handler Html
-getReceitaR rid = do
-             receita <- runDB $ get404 rid
-             defaultLayout $ widgetImports >>  [whamlet|
-                 <h1> #{receitaNome receita}
-                 <p> #{receitaDescricao receita}
-             |]
+getReceitaR rid = defaultLayout $ do (wContainer "Info Receita" (wReceita rid))
 
 getListCateR :: Handler Html
-getListCateR = do
-             listaP <- runDB $ selectList [] [Asc CategoriaNome]
-             defaultLayout $ widgetImports >>  [whamlet|
-                 <h1> Categorias cadastradas:
-                 $forall Entity cid categoria <- listaP
-                     <p> #{categoriaNome categoria} <br>
-             |]
+getListCateR = defaultLayout $ do (wContainer "Lista de Categorias" wListCate)
 
 getAutR :: Handler Html
 getAutR = do
           (widget, enctype) <- generateFormPost formUsuario
-          defaultLayout $ widgetImports >> widgetForm AutR enctype widget "Login"
+          defaultLayout $ do (wContainer "Login" (widgetForm AutR enctype widget "Login"))
 
 postAutR :: Handler Html
 postAutR = do
@@ -364,13 +399,13 @@ postAutR = do
 getByeR :: Handler Html
 getByeR = do
           deleteSession "_ID"
-          defaultLayout $ widgetImports >> [whamlet| BYE! <br>
-                        <a href=@{HomeR}> Voltar|]
+          defaultLayout $ (wContainer "Login" ([whamlet| BYE! <br>
+                        <a href=@{HomeR}> Voltar|]))
 
 connStr = "dbname=ddniie89e3rtk3 host=ec2-54-225-199-108.compute-1.amazonaws.com user=haldvwbpgvjigm password=PQOXmc2BAD8zxzmBJmDx7KPMh6 port=5432"
 
 main::IO()
 main = runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do
        runSqlPersistMPool (runMigration migrateAll) pool
---       warp 8080 $ Sitio pool
-       warpEnv (Sitio pool)
+       warp 8080 $ Sitio pool
+--       warpEnv (Sitio pool)
