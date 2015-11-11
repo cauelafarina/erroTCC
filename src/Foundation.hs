@@ -5,11 +5,15 @@
 module Foundation where
 import Import
 import Yesod
+import Yesod.Static
 import Data.Text
 import Database.Persist.Postgresql
     ( ConnectionPool, SqlBackend, runSqlPool, runMigration )
 
-data Sitio = Sitio { connPool :: ConnectionPool }
+data Sitio = Sitio { connPool :: ConnectionPool,
+                     getStatic :: Static }
+
+staticFiles "./"
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Ingrediente
@@ -47,7 +51,7 @@ instance YesodPersist Sitio where
        runSqlPool f pool
 
 instance Yesod Sitio where
-{-    authRoute _ = Just AutR --quando precisar se autenticar
+    authRoute _ = Just $ LoginR --quando precisar se autenticar
     isAuthorized CadastroR _ = isAdmin --torna a rota necessaria por login
     isAuthorized CadIngreR _ = isAdmin
     isAuthorized CadReceitaR _ = isAdmin
@@ -61,7 +65,7 @@ isAdmin = do
         Nothing -> AuthenticationRequired
         Just "admin" -> Authorized
         Just _ -> Unauthorized "Voce tem que ser um administrador"
--}
+
 type Form a = Html -> MForm Handler (FormResult a, Widget)
 
 instance RenderMessage Sitio FormMessage where

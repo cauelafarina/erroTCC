@@ -1,0 +1,13 @@
+<div class="row">
+       <div class="col-sm-12">
+            <div class="col-sm-12 page-header">
+                  <h1>
+                      <span class="glyphicon glyphicon-download-alt">
+                      #{y}
+                      <!--$maybe mm <- msg
+                      #{mm}-->
+<div class="row">
+        <div class="col-sm-6" class="form-group">
+            <form method=post action=@{x} enctype=#{enctype}>
+                ^{widget}
+            <input type="submit" value=#{val}>

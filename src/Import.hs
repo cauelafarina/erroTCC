@@ -2,6 +2,7 @@
 module Import where
 
 import Yesod
+import Yesod.Static -- imagens
 
 pRoutes = [parseRoutes|
    / HomeR GET
@@ -16,7 +17,9 @@ pRoutes = [parseRoutes|
    /cadastro/receita CadReceitaR GET POST
    /cadastro/busca CadBuscaR GET POST
    /cadastro/categoria CadCateR GET POST
-   /auto AutR GET POST
+   /cadastro/usuario CadUseR GET POST
+   /login LoginR GET POST
    /creditos CreditoR GET
    /bye ByeR GET
+   /static StaticR Static getStatic
 |]
