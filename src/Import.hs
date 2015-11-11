@@ -9,6 +9,7 @@ pRoutes = [parseRoutes|
    /busca BuscaR GET
    /listar ListaR GET
    /receita/#ReceitaId ReceitaR GET
+   /categoria/#CategoriaId CategoriaR GET
    /listar/ingrediente ListIngreR GET
    /listar/receita ListReceitaR GET
    /listar/categoria ListCateR GET

@@ -9,6 +9,7 @@ import Foundation
 import Control.Monad.Logger (runStdoutLoggingT) --ver criação do banco
 import Control.Applicative --criar formulario
 import Data.Text
+import Text.Lucius
 
 import Database.Persist.Postgresql
 
@@ -54,6 +55,7 @@ widgetForm :: Route Sitio -> Enctype -> Widget -> Text -> Text -> Widget
 widgetForm x enctype widget y val = do
      msg <- getMessage
      $(whamletFile "form.hamlet")
+     toWidget $(luciusFile "teste.lucius")
 
 wHead :: String -> Widget
 wHead title = toWidgetHead [hamlet|
@@ -95,8 +97,10 @@ wNavigation = [whamlet|
                     <li>
                       <a href=@{ListReceitaR}>Receitas
 
+                
+
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <a href=@{CadastroR} class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <span class="glyphicon glyphicon-remove-circle">
                     Cadastro
                     <span class="caret">
@@ -140,6 +144,22 @@ widgetWelcome = [whamlet|
 
 |]
 
+wCadastro :: Widget
+wCadastro = do [whamlet|
+    <div class="row">
+      <div class="col-xs-6 col-md-3">
+        <a href=@{CadIngreR} class="thumbnail">
+          <p>Ingredientes
+      <div class="col-xs-6 col-md-3">
+        <a href=@{CadCateR} class="thumbnail">
+          <p>Categorias
+      <div class="col-xs-6 col-md-3">
+        <a href=@{CadReceitaR} class="thumbnail">
+          <p>Receitas
+      <div class="col-xs-6 col-md-3">
+        <a href=@{CadBuscaR} class="thumbnail">
+          <p>Buscas
+|]
 
 wCredito :: Widget
 wCredito = do
@@ -153,7 +173,7 @@ wCredito = do
         <div class="row">
             <div class="col-sm-6">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-hover">
                       <thead>
                         <tr>
                           <th>Alunos
@@ -186,7 +206,7 @@ wListReceitas = do
     <div class="row">
       <div class="col-md-12">
           <div class="table-responsive">
-            <table class="table">
+            <table class="table table-hover">
               <thead>
                 <tr>
                   <th>Receitas Cadastrados
@@ -230,24 +250,24 @@ wListIngre = do
         <div class="col-sm-12 page-header">
           <h1>
             <span class="glyphicon glyphicon-list-alt">
-            Lista de Ingredientes
+              Lista de Ingredientes
     <div class="row">
       <div class="col-sm-12">
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Ingredientes Cadastrados
+            <tbody>
+              $forall Entity iid ingrediente <- listaI
                 <tr>
-                  <th>Ingredientes Cadastrados
-              <tbody>
-                $forall Entity iid ingrediente <- listaI
-                 <tr>
-                    <td>
-                        <p>#{ingredienteNome ingrediente}
+                  <td>
+                    <p>#{ingredienteNome ingrediente}
     |]
 
 wListCate :: Widget
 wListCate = do
-    listaC <- handlerToWidget $ runDB $ selectList [] [Asc UsuarioNome]
+    listaC <- handlerToWidget $ runDB $ selectList [] [Asc CategoriaNome]
     [whamlet|
     <div class="row">
       <div class="col-sm-12">
@@ -258,19 +278,44 @@ wListCate = do
     <div class="row">
       <div class="col-sm-12">
           <div class="table-responsive">
-            <table class="table">
+            <table class="table table-hover">
               <thead>
                 <tr>
                   <th>Categorias Cadastradas
               <tbody>
-                $forall Entity uid usuario <- listaC
+                $forall Entity cid categoria <- listaC
                   <tr>
                     <td>
-                        <p>#{usuarioNome usuario}
+                        <a href=@{CategoriaR cid}>#{categoriaNome categoria}
     |]
 
+wCategoria :: CategoriaId -> Widget
+wCategoria cid = do
+    listaR <- handlerToWidget $ runDB $ selectList [ReceitaCatid ==. cid] [Asc ReceitaNome]
+    [whamlet|
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="col-sm-12 page-header">
+          <h1>
+            <span class="glyphicon glyphicon-list-alt">
+            Lista de Receitas
+    <div class="row">
+      <div class="col-md-12">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Receitas Cadastrados
+              <tbody>
+                $forall Entity rid receita <- listaR
+                  <tr>
+                    <td>
+                        <a href=@{ReceitaR rid}>#{receitaNome receita}
+    |]
+
+
 getHomeR :: Handler Html
-getHomeR = defaultLayout $ do (wContainer "Home" widgetWelcome)
+getHomeR = defaultLayout $ (wContainer "Home" widgetWelcome)
 
 getBuscaR :: Handler Html
 getBuscaR = undefined
@@ -279,10 +324,10 @@ getListaR :: Handler Html
 getListaR = undefined
 
 getCadastroR :: Handler Html
-getCadastroR = undefined
+getCadastroR = defaultLayout $ (wContainer "Créditos" wCadastro)
 
 getCreditoR :: Handler Html
-getCreditoR = defaultLayout $ do (wContainer "Créditos" wCredito)
+getCreditoR = defaultLayout $ (wContainer "Créditos" wCredito)
 
 -- GET POST cadastro de Ingredientes
 getCadIngreR :: Handler Html
@@ -297,10 +342,8 @@ postCadIngreR = do
                 case result of
                     FormSuccess ingre -> do
                        runDB $ insert ingre
-                       defaultLayout [whamlet|
-                           <h1> #{ingredienteNome ingre} inserido com sucesso. <br>
-                           <a href=@{CadIngreR}> Voltar
-                       |]
+                       setMessage $ [shamlet| <p> #{ingredienteNome ingre} inserido com sucesso. |]
+                       redirect CadIngreR
                     _ -> redirect CadIngreR
 -- GET POST cadastro de Ingredientes
 
@@ -316,10 +359,8 @@ postCadReceitaR = do
                 case result of
                     FormSuccess receita -> do
                        runDB $ insert receita
-                       defaultLayout [whamlet|
-                           <h1> #{receitaNome receita} inserido com sucesso. <br>
-                           <a href=@{CadReceitaR}> Voltar
-                       |]
+                       setMessage $ [shamlet| <p> #{receitaNome receita} inserido com sucesso. |]
+                       redirect CadReceitaR
                     _ -> redirect CadReceitaR
 -- GET POST cadastro de Receitas
 
@@ -327,7 +368,7 @@ postCadReceitaR = do
 getCadBuscaR :: Handler Html
 getCadBuscaR = do
              (widget, enctype) <- generateFormPost formCadBusca
-             defaultLayout $ (wContainer "Cadastro de Receitas" (widgetForm CadBuscaR enctype widget "Cadastro de Buscas" "Cadastrar"))
+             defaultLayout $ (wContainer "Cadastro de Buscas" (widgetForm CadBuscaR enctype widget "Cadastro de Buscas" "Cadastrar"))
 
 postCadBuscaR :: Handler Html
 postCadBuscaR = do
@@ -335,10 +376,8 @@ postCadBuscaR = do
                 case result of
                     FormSuccess busca -> do
                        runDB $ insert busca
-                       defaultLayout [whamlet|
-                           <h1> Busca inserida com sucesso. <br>
-                           <a href=@{CadBuscaR}> Voltar
-                       |]
+                       setMessage $ [shamlet| <p> Busca inserida com sucesso. |]
+                       redirect CadBuscaR
                     _ -> redirect CadBuscaR
 -- GET POST cadastro de Busca
 
@@ -347,7 +386,7 @@ postCadBuscaR = do
 getCadCateR :: Handler Html
 getCadCateR = do
              (widget, enctype) <- generateFormPost formCadCateg
-             defaultLayout $ (wContainer "Cadastro de Receitas" (widgetForm CadCateR enctype widget "Cadastro de Categorias" "Cadastrar"))
+             defaultLayout $ (wContainer "Cadastro de Categorias" (widgetForm CadCateR enctype widget "Cadastro de Categorias" "Cadastrar"))
 
 postCadCateR :: Handler Html
 postCadCateR = do
@@ -355,10 +394,8 @@ postCadCateR = do
                 case result of
                     FormSuccess categoria -> do
                        runDB $ insert categoria
-                       defaultLayout [whamlet|
-                           <h1> #{categoriaNome categoria} inserida com sucesso. <br>
-                           <a href=@{CadCateR}> Voltar
-                       |]
+                       setMessage $ [shamlet| <p> #{categoriaNome categoria} inserido com sucesso. |]
+                       redirect CadCateR
                     _ -> redirect CadCateR
 -- GET POST cadastro de Categorias
 
@@ -366,7 +403,7 @@ postCadCateR = do
 getCadUseR :: Handler Html
 getCadUseR = do
              (widget, enctype) <- generateFormPost formUsuario
-             defaultLayout $ widgetForm CadUseR enctype widget "Cadastro de Usuários" "Cadastrar"
+             defaultLayout $ (wContainer "Cadastro de Usuarios" (widgetForm CadUseR enctype widget "Cadastro de Usuários" "Cadastrar"))
 
 postCadUseR :: Handler Html
 postCadUseR = do
@@ -374,24 +411,25 @@ postCadUseR = do
                 case result of
                     FormSuccess usuario -> do
                        runDB $ insert usuario
-                       defaultLayout [whamlet|
-                           <h1> #{usuarioNome usuario} inserido com sucesso. <br>
-                           <a href=@{CadUseR}> Voltar
-                       |]
-                    _ -> redirect CadCateR
+                       setMessage $ [shamlet| <p> #{usuarioNome usuario} inserido com sucesso. |]
+                       redirect CadUseR
+                    _ -> redirect CadUseR
 -- GET POST cadastro de Usuario
 
 getListIngreR :: Handler Html
-getListIngreR = defaultLayout $ do (wContainer "Lista de Ingredientes" wListIngre)
+getListIngreR = defaultLayout $ (wContainer "Lista de Ingredientes" wListIngre)
 
 getListReceitaR :: Handler Html
-getListReceitaR = defaultLayout $ do (wContainer "Lista de Receitas" wListReceitas)
+getListReceitaR = defaultLayout $ (wContainer "Lista de Receitas" wListReceitas)
 
 getReceitaR :: ReceitaId -> Handler Html
-getReceitaR rid = defaultLayout $ do (wContainer "Info Receita" (wReceita rid))
+getReceitaR rid = defaultLayout $ (wContainer "Info Receita" (wReceita rid))
+
+getCategoriaR :: CategoriaId -> Handler Html
+getCategoriaR cid = defaultLayout $ (wContainer "Info Categoria" (wCategoria cid))
 
 getListCateR :: Handler Html
-getListCateR = defaultLayout $ do (wContainer "Lista de Categorias" wListCate)
+getListCateR = defaultLayout $ (wContainer "Lista de Categorias" wListCate)
 
 getLoginR :: Handler Html
 getLoginR = do
@@ -407,9 +445,9 @@ postLoginR = do
             case usuario of
                 Just (Entity uid usr) -> do
                     setSession "_ID" (usuarioNome usr)
-                    redirect CadIngreR
+                    redirect CadastroR
                 Nothing -> do
-                    setMessage $ [shamlet| Invalid user |]
+                    setMessage $ [shamlet| <p>Usuário inválido |]
                     redirect LoginR
         _ -> redirect LoginR
 
