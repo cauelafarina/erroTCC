@@ -7,9 +7,9 @@
                       #{y}
                       $maybe mm <- msg
                         #{mm}
+
 <div class="row">
      <div class="box" >
-         <form>
             <div class="col-sm-6" class="form-group">
                 <form method=post action=@{x} enctype=#{enctype}>
                     ^{widget}

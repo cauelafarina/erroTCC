@@ -21,8 +21,8 @@ formCadIngre = renderDivs $ Ingrediente <$>
 
 formCadReceita :: Form Receita
 formCadReceita = renderDivs $ Receita <$>
-                 areq (selectField catg) "Categoria" Nothing <*>
-                 areq textField "Nome: " Nothing <*>
+                 areq (selectField catg) "Categoria: <br>" Nothing <*>
+                 areq textField "Nome: <br>" Nothing <*>
                  areq textareaField "Descrição: " Nothing
 
 catg = do
@@ -65,6 +65,8 @@ wHead title = toWidgetHead [hamlet|
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-2.1.4.min.js" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,600,400italic,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Slab:400,100,100italic,300,300italic,400italic,600,600italic,700,700italic' rel='stylesheet' type='text/css'>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Josefin+Slab' rel='stylesheet' type='text/css'>
@@ -73,7 +75,7 @@ wHead title = toWidgetHead [hamlet|
 
 wNavigation :: Widget
 wNavigation = [whamlet|
-        <div class="brand">Do Armario à Geladeira
+        <div class="brand">Do Armário à Geladeira
         <div class="address-bar">Aqui você não passa fome
 
         <!-- Navigation -->
@@ -108,6 +110,8 @@ wNavigation = [whamlet|
                             <a href=@{CadastroR}>Cadastro
                         <li>
                             <a href=@{CreditoR}>Sobre
+                        <li>
+                            <a href=@{ByeR}>Sair
                 <!-- /.navbar-collapse -->
 |]
 
@@ -201,8 +205,8 @@ wCredito = do
                     <img class="img-responsive img-border-left" src=@{StaticR logo_jpg} alt="">
                 <div class="col-md-6">
                     <p>Esse foi um projeto de finalização de curso de Análise e Desenvolimento de Sistemas.
-                    <p>Nossa proposta foi construir uma plataforma culinária.
-                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                    <p>Nossa proposta foi construir uma plataforma culinária com um diferencial na maneira de buscar as receitas.
+                    <p>Aqui você entra com os ingredientes que você encontra na sua cozinha e nós retornamos as possíveis receitas à serem feitas com eles.
                 <div class="clearfix">
 
         <div class="row">
@@ -214,19 +218,19 @@ wCredito = do
                     <hr>
                 <div class="col-sm-3 text-center">
                     <img class="img-responsive" src=@{StaticR caue_jpg} alt="">
-                    <h3>Caue La Farina
+                    <h4>Caue La Farina<br>
                         <small>1310007-7
                 <div class="col-sm-3 text-center">
                     <img class="img-responsive" src=@{StaticR guilherme_jpg} alt="">
-                    <h3>Guilherme Egidio
+                    <h4>Guilherme Egidio<br>
                         <small>R.A.
                 <div class="col-sm-3 text-center">
                     <img class="img-responsive" src=@{StaticR jorge_jpg} alt="">
-                    <h3>Jorge Correa
+                    <h4>Jorge Correa<br>
                         <small>R.A.
                 <div class="col-sm-3 text-center">
                     <img class="img-responsive" src=@{StaticR julliana_jpg} alt="">
-                    <h3>Julliana Alvarez
+                    <h4>Julliana Alvarez<br>
                         <small>R.A.
                 <div class="clearfix">
     <!-- /.container -->
@@ -476,7 +480,7 @@ getListCateR = defaultLayout $ (wContainer "Lista de Categorias" wListCate) >> t
 getLoginR :: Handler Html
 getLoginR = do
     (wid,enc) <- generateFormPost formUsuario
-    defaultLayout $ (wContainer "Login" (widgetForm LoginR enc wid "" "Log in"))
+    defaultLayout $ (wContainer "Login" (widgetForm LoginR enc wid "" "Log in")) >> toWidget $(luciusFile "boot.lucius")
 
 postLoginR :: Handler Html
 postLoginR = do
@@ -496,7 +500,7 @@ postLoginR = do
 getByeR :: Handler Html
 getByeR = do
           deleteSession "_ID"
-          defaultLayout $ (wContainer "Login" ([whamlet| BYE! <br>
+          defaultLayout $ (wContainer "Login" ([whamlet| <h1> BYE! <br>
                         <a href=@{HomeR}> Voltar|])) >> toWidget $(luciusFile "boot.lucius")
 
 connStr = "dbname=d6fj7u9j3cc8jn host=ec2-107-21-221-107.compute-1.amazonaws.com user=gcpykscolfkpbo password=8uEXiyfq8JCR0YNng9IAcFgDEV port=5432"
@@ -505,5 +509,5 @@ main::IO()
 main = runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do
        runSqlPersistMPool (runMigration migrateAll) pool
        s <- static "."
---       warp 8080 $ Sitio pool
+--       warp 8080 $ Sitio pool s
        warpEnv (Sitio pool s)

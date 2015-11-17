@@ -51,7 +51,7 @@ instance YesodPersist Sitio where
        runSqlPool f pool
 
 instance Yesod Sitio where
-{--    authRoute _ = Just $ LoginR --quando precisar se autenticar
+    authRoute _ = Just $ LoginR --quando precisar se autenticar
     isAuthorized CadastroR _ = isAdmin --torna a rota necessaria por login
     isAuthorized CadIngreR _ = isAdmin
     isAuthorized CadReceitaR _ = isAdmin
@@ -64,7 +64,7 @@ isAdmin = do
     return $ case mu of
         Nothing -> AuthenticationRequired
         Just "admin" -> Authorized
-        Just _ -> Unauthorized "Voce tem que ser um administrador"--}
+        Just _ -> Unauthorized "Voce tem que ser um administrador"
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
 
