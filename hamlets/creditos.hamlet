@@ -1,0 +1,42 @@
+    <div class="container">
+
+        <div class="row">
+            <div class="box">
+                <div class="col-lg-12">
+                    <hr>
+                    <h2 class="intro-text text-center">Proposta
+                        <strong>DoArmarioaGeladeira
+                    <hr>
+                <div class="col-md-6">
+                    <img class="img-responsive img-border-left" src=@{StaticR img_logo_jpg} alt="">
+                <div class="col-md-6">
+                    <p>Esse foi um projeto de finalização de curso de Análise e Desenvolimento de Sistemas.
+                    <p>Nossa proposta foi construir uma plataforma culinária com um diferencial na maneira de buscar as receitas.
+                    <p>Aqui você entra com os ingredientes que você encontra na sua cozinha e nós retornamos as possíveis receitas à serem feitas com eles.
+                <div class="clearfix">
+
+        <div class="row">
+            <div class="box">
+                <div class="col-lg-12">
+                    <hr>
+                    <h2 class="intro-text text-center">Our
+                        <strong>Team
+                    <hr>
+                <div class="col-sm-3 text-center">
+                    <img class="img-responsive" src=@{StaticR img_caue_jpg} alt="">
+                    <h4>Caue La Farina<br>
+                        <small>1310007-7
+                <div class="col-sm-3 text-center">
+                    <img class="img-responsive" src=@{StaticR img_guilherme_jpg} alt="">
+                    <h4>Guilherme Egidio<br>
+                        <small>R.A.
+                <div class="col-sm-3 text-center">
+                    <img class="img-responsive" src=@{StaticR img_jorge_jpg} alt="">
+                    <h4>Jorge Correa<br>
+                        <small>R.A.
+                <div class="col-sm-3 text-center">
+                    <img class="img-responsive" src=@{StaticR img_julliana_jpg} alt="">
+                    <h4>Julliana Alvarez<br>
+                        <small>R.A.
+                <div class="clearfix">
+    <!-- /.container -->

@@ -1,0 +1,14 @@
+    <div class="row">
+       <div class="box" >
+          <div class="col-xs-6 col-md-3">
+            <a href=@{CadIngreR} class="thumbnail">
+              <h4>Ingredientes
+          <div class="col-xs-6 col-md-3">
+            <a href=@{CadCateR} class="thumbnail">
+              <h4>Categorias
+          <div class="col-xs-6 col-md-3">
+            <a href=@{CadReceitaR} class="thumbnail">
+              <h4>Receitas
+          <div class="col-xs-6 col-md-3">
+            <a href=@{CadBuscaR} class="thumbnail">
+              <h4>Buscas

@@ -45,7 +45,7 @@ a:hover {
 .brand,
 .address-bar {
     display: none;
-     background: rgba(255,255,255,0.9);
+    background: rgba(255,108,0,0.9);
 }
 
 .navbar-brand {
@@ -134,7 +134,7 @@ footer p {
         font-size: 5em;
         font-weight: 700;
         line-height: normal;
-        color: #FF0000;
+        color: #fff;
     }
 
     .top-divider {
@@ -156,7 +156,7 @@ footer p {
         font-size: 1.25em;
         font-weight: 400;
         letter-spacing: 3px;
-        color: #0033FF;
+        color: #fff;
     }
 
     .navbar {

@@ -3,7 +3,7 @@
              MultiParamTypeClasses, DeriveDataTypeable,
              GeneralizedNewtypeDeriving, ViewPatterns #-}
 module Foundation where
-import Import
+import Routes
 import Yesod
 import Yesod.Static
 import Data.Text

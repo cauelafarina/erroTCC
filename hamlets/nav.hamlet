@@ -1,0 +1,38 @@
+        <div class="brand">Do Armário à Geladeira
+        <div class="address-bar">Aqui você não passa fome
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation
+                        <span class="icon-bar">
+                        <span class="icon-bar">
+                        <span class="icon-bar">
+                    <!-- navbar-brand is hidden on larger screens, but visible when the menu is collapsed -->
+                    <a class="navbar-brand" href=@{HomeR}>Home
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href=@{HomeR}>Home
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                              Listar
+                              <span class="caret">
+                               <ul class="dropdown-menu">
+                                 <li>
+                                   <a href=@{ListCateR}>Categorias
+                                 <li>
+                                   <a href=@{ListIngreR}>Ingredientes
+                                 <li>
+                                   <a href=@{ListReceitaR}>Receitas
+                        <li>
+                            <a href=@{CadastroR}>Cadastro
+                        <li>
+                            <a href=@{CreditoR}>Sobre
+                        <li>
+                            <a href=@{ByeR}>Sair
+                <!-- /.navbar-collapse -->

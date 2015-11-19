@@ -1,0 +1,14 @@
+    <div class="container">
+        <div class="row">
+            <div class="box">
+                <div class="col-lg-12">
+                    <hr>
+                    <h2 class="intro-text text-center">
+                        <strong>#{receitaNome receita}
+                    <hr>
+                <div class="col-lg-12 text-center">
+                    <img class="img-responsive img-border img-full" src=@{StaticR img_receita1_jpg} alt="">
+                    <h2>Como fazer:
+                        <br>
+                        <small>
+                    <p>#{receitaDescricao receita}
