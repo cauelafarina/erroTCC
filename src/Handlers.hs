@@ -366,5 +366,5 @@ main::IO()
 main = runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do
        runSqlPersistMPool (runMigration migrateAll) pool
        s <- static "."
---       warp 8080 $ Sitio pool s
-       warpEnv (Sitio pool s)
+       warp 8080 $ Sitio pool s
+--       warpEnv (Sitio pool s)
