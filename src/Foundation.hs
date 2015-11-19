@@ -13,7 +13,7 @@ import Database.Persist.Postgresql
 data Sitio = Sitio { connPool :: ConnectionPool,
                      getStatic :: Static }
 
-staticFiles "."
+staticFiles "./"
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Ingrediente

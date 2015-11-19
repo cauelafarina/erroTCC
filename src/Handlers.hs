@@ -17,13 +17,37 @@ mkYesodDispatch "Sitio" pRoutes --dizer que o arquivo é só de handler
 
 formCadIngre :: Form Ingrediente
 formCadIngre = renderDivs $ Ingrediente <$>
-               areq textField "Nome: " Nothing
+              areq textField FieldSettings{
+                        fsId = Just("nome"),
+                        fsLabel = "Nome",
+                        fsTooltip = Nothing,
+                        fsName = Just ("nome"),
+                        fsAttrs = [("placeholder","Nome"),("class","form-control")]
+                    } Nothing
 
 formCadReceita :: Form Receita
 formCadReceita = renderDivs $ Receita <$>
-                 areq (selectField catg) "Categoria: <br>" Nothing <*>
-                 areq textField "Nome: <br>" Nothing <*>
-                 areq textareaField "Descrição: " Nothing
+              areq (selectField catg) FieldSettings{
+                        fsId = Just("categoria"),
+                        fsLabel = "Categoria",
+                        fsTooltip = Nothing,
+                        fsName = Just ("categoria"),
+                        fsAttrs = [("placeholder","Categoria"),("class","form-control")]
+                    } Nothing <*>
+              areq textField FieldSettings{
+                        fsId = Just("nome"),
+                        fsLabel = "Nome",
+                        fsTooltip = Nothing,
+                        fsName = Just ("nome"),
+                        fsAttrs = [("placeholder","Nome"),("class","form-control")]
+                    } Nothing <*>
+              areq textareaField FieldSettings{
+                        fsId = Just("descricao"),
+                        fsLabel = "Descrição",
+                        fsTooltip = Nothing,
+                        fsName = Just ("descricao"),
+                        fsAttrs = [("placeholder","Descrição"),("class","form-control")]
+                    } Nothing
 
 catg = do
        entidades <- runDB $ selectList [] [Asc CategoriaNome]
@@ -31,12 +55,30 @@ catg = do
 
 formCadCateg :: Form Categoria
 formCadCateg = renderDivs $ Categoria <$>
-               areq textField "Nome: " Nothing
+              areq textField FieldSettings{
+                        fsId = Just("nome"),
+                        fsLabel = "Nome",
+                        fsTooltip = Nothing,
+                        fsName = Just ("nome"),
+                        fsAttrs = [("placeholder","Nome"),("class","form-control")]
+                    } Nothing
 
 formCadBusca :: Form Busca
 formCadBusca = renderDivs $ Busca <$>
-               areq (selectField rec) "Receita: " Nothing <*>
-               areq (selectField ing) "Ingredientes: " Nothing
+              areq (selectField rec) FieldSettings{
+                        fsId = Just("receita"),
+                        fsLabel = "Receita",
+                        fsTooltip = Nothing,
+                        fsName = Just ("receita"),
+                        fsAttrs = [("placeholder","Receita"),("class","form-control")]
+                    } Nothing <*>
+              areq (selectField ing) FieldSettings{
+                        fsId = Just("ingredientes"),
+                        fsLabel = "Ingredientes",
+                        fsTooltip = Nothing,
+                        fsName = Just ("ingredientes"),
+                        fsAttrs = [("placeholder","Ingredientes"),("class","form-control")]
+                    } Nothing
 
 rec = do
        entidades <- runDB $ selectList [] [Asc ReceitaNome]
@@ -48,29 +90,35 @@ ing = do
 
 formUsuario :: Form Usuario
 formUsuario = renderDivs $ Usuario <$>
-              areq textField "Login" Nothing <*>
-              areq textField "Senha" Nothing
+              areq textField FieldSettings{
+                        fsId = Just("nome"),
+                        fsLabel = "Nome",
+                        fsTooltip = Nothing,
+                        fsName = Just ("nome"),
+                        fsAttrs = [("placeholder","Nome"),("class","form-control")]
+                    } Nothing <*>
+
+              areq passwordField FieldSettings{
+                    fsId = Just("senha"),
+                    fsLabel = "Senha",
+                    fsTooltip = Nothing,
+                    fsName = Just ("senha"),
+                    fsAttrs = [("placeholder","Senha"),("class","form-control")]
+                    } Nothing
 
 widgetForm :: Route Sitio -> Enctype -> Widget -> Text -> Text -> Widget
 widgetForm x enctype widget y val = do
      msg <- getMessage
-     $(whamletFile "form.hamlet")
-     toWidget $(luciusFile "teste.lucius")
+     $(whamletFile "hamlets/form.hamlet")
+     toWidget $(luciusFile "lucius/teste.lucius")
 
 wHead :: String -> Widget
 wHead title = toWidgetHead [hamlet|
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,600,400italic,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Josefin+Slab:400,100,100italic,300,300italic,400italic,600,600italic,700,700italic' rel='stylesheet' type='text/css'>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Josefin+Slab' rel='stylesheet' type='text/css'>
-    <title>#{title}
+    <link href=@{StaticR css_bootstrap_min_css} rel="stylesheet"/>
+    <link href=@{StaticR css_business_casual_css} rel="stylesheet"/>
 |]
 
 wNavigation :: Widget
@@ -151,11 +199,11 @@ widgetWelcome = [whamlet|
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner">
                             <div class="item active">
-                                <img class="img-responsive img-full" src=@{StaticR slide1_jpg} alt="">
+                                <img class="img-responsive img-full" src=@{StaticR img_slide1_jpg} alt="">
                             <div class="item">
-                                <img class="img-responsive img-full" src=@{StaticR slide2_jpg} alt="">
+                                <img class="img-responsive img-full" src=@{StaticR img_slide2_jpg} alt="">
                             <div class="item">
-                                <img class="img-responsive img-full" src=@{StaticR slide3_jpg} alt="">
+                                <img class="img-responsive img-full" src=@{StaticR img_slide3_jpg} alt="">
 
                         <!-- Controls -->
                         <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
@@ -163,11 +211,11 @@ widgetWelcome = [whamlet|
                         <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
                             <span class="icon-next">
                     <h2 class="brand-before">
-                        <small>Welcome to
-                    <h1 class="brand-name">Business Casual
+                        <small>Bem vindo à
+                    <h1 class="brand-name">Do Armário à Geladeira
                     <hr class="tagline-divider">
                     <h2>
-                        <small>By
+                        <small>by
                             <strong>Start Bootstrap
 |]
 
@@ -202,7 +250,7 @@ wCredito = do
                         <strong>DoArmarioaGeladeira
                     <hr>
                 <div class="col-md-6">
-                    <img class="img-responsive img-border-left" src=@{StaticR logo_jpg} alt="">
+                    <img class="img-responsive img-border-left" src=@{StaticR img_logo_jpg} alt="">
                 <div class="col-md-6">
                     <p>Esse foi um projeto de finalização de curso de Análise e Desenvolimento de Sistemas.
                     <p>Nossa proposta foi construir uma plataforma culinária com um diferencial na maneira de buscar as receitas.
@@ -217,19 +265,19 @@ wCredito = do
                         <strong>Team
                     <hr>
                 <div class="col-sm-3 text-center">
-                    <img class="img-responsive" src=@{StaticR caue_jpg} alt="">
+                    <img class="img-responsive" src=@{StaticR img_caue_jpg} alt="">
                     <h4>Caue La Farina<br>
                         <small>1310007-7
                 <div class="col-sm-3 text-center">
-                    <img class="img-responsive" src=@{StaticR guilherme_jpg} alt="">
+                    <img class="img-responsive" src=@{StaticR img_guilherme_jpg} alt="">
                     <h4>Guilherme Egidio<br>
                         <small>R.A.
                 <div class="col-sm-3 text-center">
-                    <img class="img-responsive" src=@{StaticR jorge_jpg} alt="">
+                    <img class="img-responsive" src=@{StaticR img_jorge_jpg} alt="">
                     <h4>Jorge Correa<br>
                         <small>R.A.
                 <div class="col-sm-3 text-center">
-                    <img class="img-responsive" src=@{StaticR julliana_jpg} alt="">
+                    <img class="img-responsive" src=@{StaticR img_julliana_jpg} alt="">
                     <h4>Julliana Alvarez<br>
                         <small>R.A.
                 <div class="clearfix">
@@ -277,7 +325,7 @@ wReceita rid = do
                         <strong>#{receitaNome receita}
                     <hr>
                 <div class="col-lg-12 text-center">
-                    <img class="img-responsive img-border img-full" src=@{StaticR receita1_jpg} alt="">
+                    <img class="img-responsive img-border img-full" src=@{StaticR img_receita1_jpg} alt="">
                     <h2>Como fazer:
                         <br>
                         <small>
@@ -361,7 +409,7 @@ wCategoria cid = do
 
 
 getHomeR :: Handler Html
-getHomeR = defaultLayout $ (wContainer "Home" widgetWelcome) >> toWidget $(luciusFile "boot.lucius")
+getHomeR = defaultLayout $ (wContainer "Home" widgetWelcome) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 getBuscaR :: Handler Html
 getBuscaR = undefined
@@ -370,16 +418,16 @@ getListaR :: Handler Html
 getListaR = undefined
 
 getCadastroR :: Handler Html
-getCadastroR = defaultLayout $ (wContainer "Créditos" wCadastro) >> toWidget $(luciusFile "boot.lucius")
+getCadastroR = defaultLayout $ (wContainer "Créditos" wCadastro) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 getCreditoR :: Handler Html
-getCreditoR = defaultLayout $ (wContainer "Créditos" wCredito) >> toWidget $(luciusFile "boot.lucius")
+getCreditoR = defaultLayout $ (wContainer "Créditos" wCredito) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 -- GET POST cadastro de Ingredientes
 getCadIngreR :: Handler Html
 getCadIngreR = do
              (widget, enctype) <- generateFormPost formCadIngre
-             defaultLayout $ (wContainer "Cadastro de Ingredientes" (widgetForm CadIngreR enctype widget "Cadastro de Ingredientes" "Cadastrar")) >> toWidget $(luciusFile "boot.lucius")
+             defaultLayout $ (wContainer "Cadastro de Ingredientes" (widgetForm CadIngreR enctype widget "Cadastro de Ingredientes" "Cadastrar")) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 
 postCadIngreR :: Handler Html
@@ -397,7 +445,7 @@ postCadIngreR = do
 getCadReceitaR :: Handler Html
 getCadReceitaR = do
              (widget, enctype) <- generateFormPost formCadReceita
-             defaultLayout $ (wContainer "Cadastro de Receitas" (widgetForm CadReceitaR enctype widget "Cadastro de Receitas" "Cadastrar")) >> toWidget $(luciusFile "boot.lucius")
+             defaultLayout $ (wContainer "Cadastro de Receitas" (widgetForm CadReceitaR enctype widget "Cadastro de Receitas" "Cadastrar")) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 postCadReceitaR :: Handler Html
 postCadReceitaR = do
@@ -414,7 +462,7 @@ postCadReceitaR = do
 getCadBuscaR :: Handler Html
 getCadBuscaR = do
              (widget, enctype) <- generateFormPost formCadBusca
-             defaultLayout $ (wContainer "Cadastro de Buscas" (widgetForm CadBuscaR enctype widget "Cadastro de Buscas" "Cadastrar")) >> toWidget $(luciusFile "boot.lucius")
+             defaultLayout $ (wContainer "Cadastro de Buscas" (widgetForm CadBuscaR enctype widget "Cadastro de Buscas" "Cadastrar")) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 postCadBuscaR :: Handler Html
 postCadBuscaR = do
@@ -432,7 +480,7 @@ postCadBuscaR = do
 getCadCateR :: Handler Html
 getCadCateR = do
              (widget, enctype) <- generateFormPost formCadCateg
-             defaultLayout $ (wContainer "Cadastro de Categorias" (widgetForm CadCateR enctype widget "Cadastro de Categorias" "Cadastrar")) >> toWidget $(luciusFile "boot.lucius")
+             defaultLayout $ (wContainer "Cadastro de Categorias" (widgetForm CadCateR enctype widget "Cadastro de Categorias" "Cadastrar")) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 postCadCateR :: Handler Html
 postCadCateR = do
@@ -449,7 +497,7 @@ postCadCateR = do
 getCadUseR :: Handler Html
 getCadUseR = do
              (widget, enctype) <- generateFormPost formUsuario
-             defaultLayout $ (wContainer "Cadastro de Usuarios" (widgetForm CadUseR enctype widget "Cadastro de Usuários" "Cadastrar")) >> toWidget $(luciusFile "boot.lucius")
+             defaultLayout $ (wContainer "Cadastro de Usuarios" (widgetForm CadUseR enctype widget "Cadastro de Usuários" "Cadastrar")) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 postCadUseR :: Handler Html
 postCadUseR = do
@@ -463,24 +511,24 @@ postCadUseR = do
 -- GET POST cadastro de Usuario
 
 getListIngreR :: Handler Html
-getListIngreR = defaultLayout $ (wContainer "Lista de Ingredientes" wListIngre) >> toWidget $(luciusFile "boot.lucius")
+getListIngreR = defaultLayout $ (wContainer "Lista de Ingredientes" wListIngre) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 getListReceitaR :: Handler Html
-getListReceitaR = defaultLayout $ (wContainer "Lista de Receitas" wListReceitas) >> toWidget $(luciusFile "boot.lucius")
+getListReceitaR = defaultLayout $ (wContainer "Lista de Receitas" wListReceitas) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 getReceitaR :: ReceitaId -> Handler Html
-getReceitaR rid = defaultLayout $ (wContainer "Info Receita" (wReceita rid)) >> toWidget $(luciusFile "boot.lucius")
+getReceitaR rid = defaultLayout $ (wContainer "Info Receita" (wReceita rid)) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 getCategoriaR :: CategoriaId -> Handler Html
-getCategoriaR cid = defaultLayout $ (wContainer "Info Categoria" (wCategoria cid)) >> toWidget $(luciusFile "boot.lucius")
+getCategoriaR cid = defaultLayout $ (wContainer "Info Categoria" (wCategoria cid)) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 getListCateR :: Handler Html
-getListCateR = defaultLayout $ (wContainer "Lista de Categorias" wListCate) >> toWidget $(luciusFile "boot.lucius")
+getListCateR = defaultLayout $ (wContainer "Lista de Categorias" wListCate) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 getLoginR :: Handler Html
 getLoginR = do
     (wid,enc) <- generateFormPost formUsuario
-    defaultLayout $ (wContainer "Login" (widgetForm LoginR enc wid "" "Log in")) >> toWidget $(luciusFile "boot.lucius")
+    defaultLayout $ (wContainer "Login" (widgetForm LoginR enc wid "" "Log in")) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 postLoginR :: Handler Html
 postLoginR = do
@@ -501,7 +549,7 @@ getByeR :: Handler Html
 getByeR = do
           deleteSession "_ID"
           defaultLayout $ (wContainer "Login" ([whamlet| <h1> BYE! <br>
-                        <a href=@{HomeR}> Voltar|])) >> toWidget $(luciusFile "boot.lucius")
+                        <a href=@{HomeR}> Voltar|])) >> toWidget $(luciusFile "lucius/boot.lucius")
 
 connStr = "dbname=d6fj7u9j3cc8jn host=ec2-107-21-221-107.compute-1.amazonaws.com user=gcpykscolfkpbo password=8uEXiyfq8JCR0YNng9IAcFgDEV port=5432"
 

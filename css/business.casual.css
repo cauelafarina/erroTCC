@@ -3,14 +3,10 @@
  * Code licensed under the Apache License v2.0.
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
-@font-face {
-	font-family: "Josegin Slab";
-	src: url(https://fonts.googleapis.com/css?family=Josefin+Slab:400,100,100italic,300,300italic,400italic,600,600italic,700,700italic);
-	}
 
 body {
     font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-    background: url(@{StaticR bg_jpg}) no-repeat center center fixed;
+    background: url('../img/bg.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -40,18 +36,11 @@ hr {
     border-color: #999999;
 }
 
-a:link,
-a:active,
-a:visited,
-a:hover {
-    text-decoration: none;
-}
-/*
 .brand,
 .address-bar {
     display: none;
 }
-*/
+
 .navbar-brand {
     text-transform: uppercase;
     font-weight: 900;
@@ -62,10 +51,6 @@ a:hover {
     text-transform: uppercase;
     font-weight: 400;
     letter-spacing: 3px;
-}
-
-.thumbnail{
-    text-align: center;
 }
 
 .img-full {
@@ -138,7 +123,7 @@ footer p {
         font-size: 5em;
         font-weight: 700;
         line-height: normal;
-        color: #FF0000;
+        color: #fff;
     }
 
     .top-divider {
@@ -151,7 +136,7 @@ footer p {
     }
 
     .address-bar {
-        display: block;
+        display: inherit;
         margin: 0;
         padding: 0 0 40px;
         text-align: center;
@@ -160,7 +145,7 @@ footer p {
         font-size: 1.25em;
         font-weight: 400;
         letter-spacing: 3px;
-        color: #0033FF;
+        color: #fff;
     }
 
     .navbar {
