@@ -21,6 +21,27 @@
   (major1) == 0 && (major2) <  4 || \
   (major1) == 0 && (major2) == 4 && (minor) <= 11)
 
+/* package monad-logger-0.3.14 */
+#define VERSION_monad_logger "0.3.14"
+#define MIN_VERSION_monad_logger(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  3 || \
+  (major1) == 0 && (major2) == 3 && (minor) <= 14)
+
+/* package persistent-2.2.1 */
+#define VERSION_persistent "2.2.1"
+#define MIN_VERSION_persistent(major1,major2,minor) (\
+  (major1) <  2 || \
+  (major1) == 2 && (major2) <  2 || \
+  (major1) == 2 && (major2) == 2 && (minor) <= 1)
+
+/* package persistent-postgresql-2.2.1 */
+#define VERSION_persistent_postgresql "2.2.1"
+#define MIN_VERSION_persistent_postgresql(major1,major2,minor) (\
+  (major1) <  2 || \
+  (major1) == 2 && (major2) <  2 || \
+  (major1) == 2 && (major2) == 2 && (minor) <= 1)
+
 /* package shakespeare-2.0.6 */
 #define VERSION_shakespeare "2.0.6"
 #define MIN_VERSION_shakespeare(major1,major2,minor) (\
@@ -41,6 +62,13 @@
   (major1) <  1 || \
   (major1) == 1 && (major2) <  4 || \
   (major1) == 1 && (major2) == 4 && (minor) <= 2)
+
+/* package yesod-persistent-1.4.0.3 */
+#define VERSION_yesod_persistent "1.4.0.3"
+#define MIN_VERSION_yesod_persistent(major1,major2,minor) (\
+  (major1) <  1 || \
+  (major1) == 1 && (major2) <  4 || \
+  (major1) == 1 && (major2) == 4 && (minor) <= 0)
 
 /* package yesod-static-1.5.0.3 */
 #define VERSION_yesod_static "1.5.0.3"
@@ -112,5 +140,5 @@
   (major1) == 0 && (major2) <  28 || \
   (major1) == 0 && (major2) == 28 && (minor) <= 0)
 
-#define CURRENT_PACKAGE_KEY "erroT_AgaDOjueIgBEJJ0xifehRK"
+#define CURRENT_PACKAGE_KEY "erroT_CGbL84zcURG8Gk4IG2GuKS"
 

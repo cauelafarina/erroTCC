@@ -1,5 +1,16 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes,
              TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings, TypeFamilies, QuasiQuotes,
+             TemplateHaskell, GADTs, FlexibleContexts,
+             MultiParamTypeClasses, DeriveDataTypeable,
+             GeneralizedNewtypeDeriving, ViewPatterns #-}
+{-# LANGUAGE EmptyDataDecls    #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE GADTs             #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes       #-}
+{-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TypeFamilies      #-}
 
 module Handlers where
 import Routes
@@ -360,7 +371,7 @@ getByeR = do
           defaultLayout $ [whamlet| <h1> BYE! <br>
                         <a href=@{HomeR}> Voltar|] >> toWidget $(luciusFile "lucius/boot.lucius")
 
-connStr = "dbname=d6fj7u9j3cc8jn host=ec2-107-21-221-107.compute-1.amazonaws.com user=gcpykscolfkpbo password=8uEXiyfq8JCR0YNng9IAcFgDEV port=5432"
+connStr = "dbname=errotcc host=localhost user=eric password=root port=5432"
 
 main::IO()
 main = runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do
