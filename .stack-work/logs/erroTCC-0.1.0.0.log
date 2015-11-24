@@ -1,0 +1,32 @@
+Configuring erroTCC-0.1.0.0...
+Preprocessing library erroTCC-0.1.0.0...
+In-place registering erroTCC-0.1.0.0...
+Preprocessing executable 'erroTCC-exe' for erroTCC-0.1.0.0...
+
+src/Foundation.hs:8:8:
+    Could not find module ‘Yesod.Static’
+    It is a member of the hidden package ‘yesod-static-1.5.0.3@yesod_EYe7OGgJ9uL6Apf0GlGnVU’.
+    Perhaps you need to add ‘yesod-static’ to the build-depends in your .cabal file.
+    Use -v to see a list of the files searched for.
+
+src/Handlers.hs:9:8:
+    Could not find module ‘Control.Monad.Logger’
+    It is a member of the hidden package ‘monad-logger-0.3.14@monad_LPwgDi9JpFEGNVRYbWvREh’.
+    Perhaps you need to add ‘monad-logger’ to the build-depends in your .cabal file.
+    Use -v to see a list of the files searched for.
+
+src/Handlers.hs:11:8:
+    Could not find module ‘Data.Text’
+    It is a member of the hidden package ‘text-1.2.1.3@text_1l1AN4I48k37RaQ6fm6CEh’.
+    Perhaps you need to add ‘text’ to the build-depends in your .cabal file.
+    Use -v to see a list of the files searched for.
+
+src/Handlers.hs:12:8:
+    Could not find module ‘Text.Lucius’
+    It is a member of the hidden package ‘shakespeare-2.0.6@shake_H6AYCzksHF8LdCuHfpTccR’.
+    Perhaps you need to add ‘shakespeare’ to the build-depends in your .cabal file.
+    Use -v to see a list of the files searched for.
+
+src/Handlers.hs:14:8:
+    Could not find module ‘Database.Persist.Postgresql’
+    Use -v to see a list of the files searched for.

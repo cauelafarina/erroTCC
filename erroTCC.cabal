@@ -1,0 +1,20 @@
+name:           erroTCC
+version:        0.1
+cabal-version:  >=1.2
+build-type:     Simple
+author:         Caue
+
+executable erroTCC
+  hs-source-dirs:  src
+  main-is:         Handlers.hs
+  build-depends:   base >= 4,
+                   yesod,
+                   yesod-static,
+                   shakespeare,
+                   file-embed,
+                   text,
+                   monad-logger,
+                   yesod-persistent,
+                   mime-mail
+  ghc-options:     -Wall
+  other-modules:   Foundation

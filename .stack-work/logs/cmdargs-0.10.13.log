@@ -1,0 +1,13 @@
+Configuring cmdargs-0.10.13...
+Building cmdargs-0.10.13...
+Preprocessing library cmdargs-0.10.13...
+[ 1 of 25] Compiling System.Console.CmdArgs.Implicit.Ann ( System/Console/CmdArgs/Implicit/Ann.hs, .stack-work/dist/x86_64-osx/Cabal-1.22.4.0/build/System/Console/CmdArgs/Implicit/Ann.o )
+[ 2 of 25] Compiling System.Console.CmdArgs.Implicit.UI ( System/Console/CmdArgs/Implicit/UI.hs, .stack-work/dist/x86_64-osx/Cabal-1.22.4.0/build/System/Console/CmdArgs/Implicit/UI.o )
+[ 3 of 25] Compiling System.Console.CmdArgs.Verbosity ( System/Console/CmdArgs/Verbosity.hs, .stack-work/dist/x86_64-osx/Cabal-1.22.4.0/build/System/Console/CmdArgs/Verbosity.o )
+[ 4 of 25] Compiling System.Console.CmdArgs.Implicit.Type ( System/Console/CmdArgs/Implicit/Type.hs, .stack-work/dist/x86_64-osx/Cabal-1.22.4.0/build/System/Console/CmdArgs/Implicit/Type.o )
+[ 5 of 25] Compiling System.Console.CmdArgs.Explicit.SplitJoin ( System/Console/CmdArgs/Explicit/SplitJoin.hs, .stack-work/dist/x86_64-osx/Cabal-1.22.4.0/build/System/Console/CmdArgs/Explicit/SplitJoin.o )
+[ 6 of 25] Compiling System.Console.CmdArgs.Explicit.ExpandArgsAt ( System/Console/CmdArgs/Explicit/ExpandArgsAt.hs, .stack-work/dist/x86_64-osx/Cabal-1.22.4.0/build/System/Console/CmdArgs/Explicit/ExpandArgsAt.o )
+[ 7 of 25] Compiling System.Console.CmdArgs.Explicit.Type ( System/Console/CmdArgs/Explicit/Type.hs, .stack-work/dist/x86_64-osx/Cabal-1.22.4.0/build/System/Console/CmdArgs/Explicit/Type.o )
+[ 8 of 25] Compiling System.Console.CmdArgs.Explicit.Process ( System/Console/CmdArgs/Explicit/Process.hs, .stack-work/dist/x86_64-osx/Cabal-1.22.4.0/build/System/Console/CmdArgs/Explicit/Process.o )
+[ 9 of 25] Compiling System.Console.CmdArgs.Explicit.Complete ( System/Console/CmdArgs/Explicit/Complete.hs, .stack-work/dist/x86_64-osx/Cabal-1.22.4.0/build/System/Console/CmdArgs/Explicit/Complete.o )
+[10 of 25] Compiling System.Console.CmdArgs.Helper ( System/Console/CmdArgs/Helper.hs, .stack-work/dist/x86_64-osx/Cabal-1.22.4.0/build/System/Console/CmdArgs/Helper.o )
