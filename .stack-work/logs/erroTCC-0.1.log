@@ -1,0 +1,12 @@
+Configuring erroTCC-0.1...
+Preprocessing executable 'erroTCC' for erroTCC-0.1...
+
+src/Handlers.hs:9:8:
+    Could not find module ‘Control.Monad.Logger’
+    It is a member of the hidden package ‘monad-logger-0.3.14@monad_LPwgDi9JpFEGNVRYbWvREh’.
+    Perhaps you need to add ‘monad-logger’ to the build-depends in your .cabal file.
+    Use -v to see a list of the files searched for.
+
+src/Handlers.hs:14:8:
+    Could not find module ‘Database.Persist.Postgresql’
+    Use -v to see a list of the files searched for.
