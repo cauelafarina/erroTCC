@@ -1,0 +1,26 @@
+Configuring yesod-1.4.2...
+Building yesod-1.4.2...
+Preprocessing library yesod-1.4.2...
+[1 of 6] Compiling Yesod.Default.Handlers ( Yesod/Default/Handlers.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.4.0/build/Yesod/Default/Handlers.o )
+[2 of 6] Compiling Yesod.Default.Util ( Yesod/Default/Util.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.4.0/build/Yesod/Default/Util.o )
+[3 of 6] Compiling Yesod.Default.Config2 ( Yesod/Default/Config2.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.4.0/build/Yesod/Default/Config2.o )
+
+Yesod/Default/Config2.hs:23:1: Warning:
+    The import of ‘Data.Monoid’ is redundant
+      except perhaps to import instances from ‘Data.Monoid’
+    To import instances alone, use: import Data.Monoid()
+
+Yesod/Default/Config2.hs:31:1: Warning:
+    The import of ‘Control.Applicative’ is redundant
+      except perhaps to import instances from ‘Control.Applicative’
+    To import instances alone, use: import Control.Applicative()
+[4 of 6] Compiling Yesod.Default.Config ( Yesod/Default/Config.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.4.0/build/Yesod/Default/Config.o )
+
+Yesod/Default/Config.hs:18:1: Warning:
+    The import of ‘toLower’ from module ‘Data.Char’ is redundant
+[5 of 6] Compiling Yesod.Default.Main ( Yesod/Default/Main.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.4.0/build/Yesod/Default/Main.o )
+[6 of 6] Compiling Yesod            ( Yesod.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.4.0/build/Yesod.o )
+In-place registering yesod-1.4.2...
+Installing library in
+/home/caue/.stack/snapshots/x86_64-linux/lts-3.15/7.10.2/lib/x86_64-linux-ghc-7.10.2/yesod-1.4.2-9k5GhhPkzDy5DY1sNEIp8O
+Registering yesod-1.4.2...

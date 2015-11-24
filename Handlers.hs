@@ -135,7 +135,7 @@ wHome = do
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
            setTitle "Do Armário à Geladeira - Home"
-           wHome >> toWidget $(luciusFile "lucius/boot.lucius") $(luciusFile "lucius/font.lucius")
+           wHome >> toWidget $(luciusFile "lucius/boot.lucius") >> toWidget $(luciusFile "lucius/font.lucius")
 --home
 
 --creditos
@@ -149,7 +149,7 @@ wCredito = do
 getCreditoR :: Handler Html
 getCreditoR = defaultLayout $ do
            setTitle "Do Armário à Geladeira - Créditos"
-           wCredito >> toWidget $(luciusFile "lucius/boot.lucius") $(luciusFile "lucius/font.lucius")
+           wCredito >> toWidget $(luciusFile "lucius/boot.lucius") >> toWidget $(luciusFile "lucius/font.lucius")
 --creditos
 
 --listarReceitas
@@ -164,7 +164,7 @@ wListReceitas = do
 getListReceitaR :: Handler Html
 getListReceitaR = defaultLayout $ do
            setTitle "Do Armário à Geladeira - Lista de Receitas"
-           wListReceitas >> toWidget $(luciusFile "lucius/boot.lucius") $(luciusFile "lucius/font.lucius")
+           wListReceitas >> toWidget $(luciusFile "lucius/boot.lucius") >> toWidget $(luciusFile "lucius/font.lucius")
 --listarReceitas
 
 --listarIngredientes
@@ -179,7 +179,7 @@ wListIngre = do
 getListIngreR :: Handler Html
 getListIngreR = defaultLayout $ do
            setTitle "Do Armário à Geladeira - Lista de Ingredientes"
-           wListIngre >> toWidget $(luciusFile "lucius/boot.lucius") $(luciusFile "lucius/font.lucius")
+           wListIngre >> toWidget $(luciusFile "lucius/boot.lucius") >> toWidget $(luciusFile "lucius/font.lucius")
 --listarIngredientes
 
 --listarCategorias
@@ -194,7 +194,7 @@ wListCate = do
 getListCateR :: Handler Html
 getListCateR = defaultLayout $ do
            setTitle "Do Armário à Geladeira - Lista de Categorias"
-           wListCate >> toWidget $(luciusFile "lucius/boot.lucius") $(luciusFile "lucius/font.lucius")
+           wListCate >> toWidget $(luciusFile "lucius/boot.lucius") >> toWidget $(luciusFile "lucius/font.lucius")
 --listarCategorias
 
 --receita
@@ -209,7 +209,7 @@ wReceita rid = do
 getReceitaR :: ReceitaId -> Handler Html
 getReceitaR rid = defaultLayout $ do
            setTitle "Do Armário à Geladeira - Receitas"
-           wReceita rid >> toWidget $(luciusFile "lucius/boot.lucius") $(luciusFile "lucius/font.lucius")
+           wReceita rid >> toWidget $(luciusFile "lucius/boot.lucius") >> toWidget $(luciusFile "lucius/font.lucius")
 --receita
 
 --categoria
@@ -224,7 +224,7 @@ wCategoria cid = do
 getCategoriaR :: CategoriaId -> Handler Html
 getCategoriaR cid = defaultLayout $ do
            setTitle "Do Armário à Geladeira - Categorias"
-           wCategoria cid >> toWidget $(luciusFile "lucius/boot.lucius") $(luciusFile "lucius/font.lucius")
+           wCategoria cid >> toWidget $(luciusFile "lucius/boot.lucius") >> toWidget $(luciusFile "lucius/font.lucius")
 --categoria
 
 getBuscaR :: Handler Html
@@ -244,7 +244,7 @@ wCadastro = do
 getCadastroR :: Handler Html
 getCadastroR = defaultLayout $ do
            setTitle "Do Armário à Geladeira - Cadastro"
-           wCadastro >> toWidget $(luciusFile "lucius/boot.lucius") $(luciusFile "lucius/font.lucius")
+           wCadastro >> toWidget $(luciusFile "lucius/boot.lucius") >> toWidget $(luciusFile "lucius/font.lucius")
 --cadastro
 
 -- GET POST cadastro de Ingredientes
@@ -337,7 +337,7 @@ postCadUseR = do
 getLoginR :: Handler Html
 getLoginR = do
     (wid,enc) <- generateFormPost formUsuario
-    defaultLayout $ widgetForm LoginR enc wid "" "Log in" >> toWidget $(luciusFile "lucius/boot.lucius")
+    defaultLayout $ widgetForm LoginR enc wid "" "Log in" >> toWidget $(luciusFile "lucius/boot.lucius") 
 
 postLoginR :: Handler Html
 postLoginR = do
@@ -360,7 +360,7 @@ getByeR = do
           defaultLayout $ [whamlet| <h1> BYE! <br>
                         <a href=@{HomeR}> Voltar|] >> toWidget $(luciusFile "lucius/boot.lucius")
 
-connStr = "dbname=d6fj7u9j3cc8jn host=ec2-107-21-221-107.compute-1.amazonaws.com user=gcpykscolfkpbo password=8uEXiyfq8JCR0YNng9IAcFgDEV port=5432"
+connStr = "dbname=d66iuq8s0bt56s host=eec2-54-83-203-50.compute-1.amazonaws.com user=vzgrwcoiiuhgta password= MTC25TuvHiEOwOAcquh7IeOhlm port=5432"
 
 main::IO()
 main = runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do

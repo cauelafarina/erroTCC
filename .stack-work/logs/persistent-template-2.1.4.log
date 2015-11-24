@@ -1,0 +1,31 @@
+Configuring persistent-template-2.1.4...
+Building persistent-template-2.1.4...
+Preprocessing library persistent-template-2.1.4...
+
+Database/Persist/TH.hs:12:14: Warning:
+    -XOverlappingInstances is deprecated: instead use per-instance pragmas OVERLAPPING/OVERLAPPABLE/OVERLAPS
+[1 of 1] Compiling Database.Persist.TH ( Database/Persist/TH.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.4.0/build/Database/Persist/TH.o )
+
+Database/Persist/TH.hs:62:1: Warning:
+    The import of ‘Data.Monoid’ is redundant
+      except perhaps to import instances from ‘Data.Monoid’
+    To import instances alone, use: import Data.Monoid()
+
+Database/Persist/TH.hs:71:1: Warning:
+    The import of ‘Control.Applicative’ is redundant
+      except perhaps to import instances from ‘Control.Applicative’
+    To import instances alone, use: import Control.Applicative()
+
+Database/Persist/TH.hs:75:1: Warning:
+    The import of ‘parseUrlPieceMaybe’
+    from module ‘Web.HttpApiData’ is redundant
+
+Database/Persist/TH.hs:236:26: Warning: Defined but not used: ‘x’
+
+Database/Persist/TH.hs:268:22: Warning:
+    This binding for ‘ent’ shadows the existing binding
+      bound at Database/Persist/TH.hs:248:41
+In-place registering persistent-template-2.1.4...
+Installing library in
+/home/caue/.stack/snapshots/x86_64-linux/lts-3.15/7.10.2/lib/x86_64-linux-ghc-7.10.2/persistent-template-2.1.4-9CK0U6oZA7PBeRjYiJTBIs
+Registering persistent-template-2.1.4...
