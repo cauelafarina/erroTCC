@@ -16,11 +16,11 @@ version :: Version
 version = Version [0,1] []
 bindir, libdir, datadir, libexecdir, sysconfdir :: FilePath
 
-bindir     = "/Users/eric/Desktop/caue/.stack-work/install/x86_64-osx/lts-3.9/7.10.2/bin"
-libdir     = "/Users/eric/Desktop/caue/.stack-work/install/x86_64-osx/lts-3.9/7.10.2/lib/x86_64-osx-ghc-7.10.2/erroTCC-0.1-CGbL84zcURG8Gk4IG2GuKS"
-datadir    = "/Users/eric/Desktop/caue/.stack-work/install/x86_64-osx/lts-3.9/7.10.2/share/x86_64-osx-ghc-7.10.2/erroTCC-0.1"
-libexecdir = "/Users/eric/Desktop/caue/.stack-work/install/x86_64-osx/lts-3.9/7.10.2/libexec"
-sysconfdir = "/Users/eric/Desktop/caue/.stack-work/install/x86_64-osx/lts-3.9/7.10.2/etc"
+bindir     = "/Users/eric/Desktop/erroTCC/.stack-work/install/x86_64-osx/lts-3.9/7.10.2/bin"
+libdir     = "/Users/eric/Desktop/erroTCC/.stack-work/install/x86_64-osx/lts-3.9/7.10.2/lib/x86_64-osx-ghc-7.10.2/erroTCC-0.1-CGbL84zcURG8Gk4IG2GuKS"
+datadir    = "/Users/eric/Desktop/erroTCC/.stack-work/install/x86_64-osx/lts-3.9/7.10.2/share/x86_64-osx-ghc-7.10.2/erroTCC-0.1"
+libexecdir = "/Users/eric/Desktop/erroTCC/.stack-work/install/x86_64-osx/lts-3.9/7.10.2/libexec"
+sysconfdir = "/Users/eric/Desktop/erroTCC/.stack-work/install/x86_64-osx/lts-3.9/7.10.2/etc"
 
 getBinDir, getLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
 getBinDir = catchIO (getEnv "erroTCC_bindir") (\_ -> return bindir)

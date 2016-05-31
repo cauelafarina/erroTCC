@@ -2,21 +2,15 @@
              TemplateHaskell, GADTs, FlexibleContexts,
              MultiParamTypeClasses, DeriveDataTypeable,
              GeneralizedNewtypeDeriving, ViewPatterns #-}
-{-# LANGUAGE EmptyDataDecls    #-}
-{-# LANGUAGE FlexibleContexts  #-}
-{-# LANGUAGE GADTs             #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE QuasiQuotes       #-}
-{-# LANGUAGE TemplateHaskell   #-}
-{-# LANGUAGE TypeFamilies      #-}
-
 module Foundation where
-import Routes
+import Import(pRoutes)
+import Prelude
+-- import Import.NoFoundation
 import Yesod
 import Yesod.Static
 import Data.Text
-import Database.Persist.Postgresql( ConnectionPool, SqlBackend, runSqlPool, runMigration )
-import           Database.Persist.TH
+import Database.Persist.Postgresql
+    ( ConnectionPool, SqlBackend, runSqlPool, runMigration )
 
 data Sitio = Sitio { connPool :: ConnectionPool,
                      getStatic :: Static }

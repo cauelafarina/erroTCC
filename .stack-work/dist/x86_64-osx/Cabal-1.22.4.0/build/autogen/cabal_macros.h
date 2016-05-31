@@ -133,12 +133,12 @@
   (major1) == 0 && (major2) <  67 || \
   (major1) == 0 && (major2) == 67 && (minor) <= 0)
 
-/* tool pkg-config-0.28 */
-#define TOOL_VERSION_pkg_config "0.28"
+/* tool pkg-config-0.29.1 */
+#define TOOL_VERSION_pkg_config "0.29.1"
 #define MIN_TOOL_VERSION_pkg_config(major1,major2,minor) (\
   (major1) <  0 || \
-  (major1) == 0 && (major2) <  28 || \
-  (major1) == 0 && (major2) == 28 && (minor) <= 0)
+  (major1) == 0 && (major2) <  29 || \
+  (major1) == 0 && (major2) == 29 && (minor) <= 1)
 
 #define CURRENT_PACKAGE_KEY "erroT_CGbL84zcURG8Gk4IG2GuKS"
 

@@ -2,7 +2,7 @@
 module Import where
 
 import Yesod
-import Yesod.Static -- imagens
+import Yesod.Static() -- imagens
 
 pRoutes = [parseRoutes|
    / HomeR GET
